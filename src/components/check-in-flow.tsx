@@ -39,7 +39,8 @@ export function CheckInFlow() {
         totalBaggageWeight: 0,
       };
       setCurrentPassenger(passengerWithBookingRef);
-      setSelectedSeat(passengerData.seat);
+      // Do not auto-select seat anymore
+      setSelectedSeat('');
       setBaggageCount(passengerData.baggageAllowance.count > 0 ? 1 : 0); // Start with 1 bag if allowed
       setScreen('flightDetails');
       return passengerData;
@@ -54,7 +55,7 @@ export function CheckInFlow() {
   };
   
   const handleConfirmCheckin = () => {
-    if (!currentPassenger) return;
+    if (!currentPassenger || !selectedSeat) return;
 
     let finalGate = currentPassenger.gate;
     if (currentPassenger.hasGateChange) {

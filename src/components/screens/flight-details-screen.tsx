@@ -8,7 +8,7 @@ import { SeatMap } from "@/components/seat-map";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle, Info } from "lucide-react";
+import { AlertTriangle, Info, Armchair } from "lucide-react";
 
 // Wheelchair icon as an inline SVG component
 const Wheelchair = (props: React.SVGProps<SVGSVGElement>) => (
@@ -52,6 +52,8 @@ export function FlightDetailsScreen({
   const isOverAllowance = baggageCount > passenger.baggageAllowance.count;
   const extraBags = baggageCount - passenger.baggageAllowance.count;
   const extraFee = extraBags * 150; // 150 SAR per extra bag
+  const isSeatSelected = !!selectedSeat;
+
 
   return (
     <div className="w-full max-w-5xl animate-in fade-in-0 duration-500">
@@ -94,6 +96,15 @@ export function FlightDetailsScreen({
         <div className="space-y-6">
           <ScreenWrapper className="w-full max-w-full">
             <SeatMap selectedSeat={selectedSeat} onSeatSelect={onSeatSelect} assignedSeat={passenger.seat} />
+            {!isSeatSelected && (
+              <Alert className="mt-4 border-accent/50 bg-accent/10 text-center">
+                  <Armchair className="h-4 w-4" />
+                  <AlertTitle className="font-bold text-accent-foreground/80">تأكيد المقعد</AlertTitle>
+                  <AlertDescription className="text-accent-foreground/90">
+                      الرجاء اختيار مقعد من الخريطة أعلاه لتفعيل زر التأكيد.
+                  </AlertDescription>
+              </Alert>
+            )}
           </ScreenWrapper>
           <ScreenWrapper className="w-full max-w-full">
             <div className="baggage-section text-center">
@@ -128,7 +139,7 @@ export function FlightDetailsScreen({
         </div>
       </div>
       <div className="flex gap-4 justify-center mt-8">
-        <Button onClick={onConfirm} size="xl" className="font-bold btn-success-gradient rounded-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        <Button onClick={onConfirm} size="xl" className="font-bold btn-success-gradient rounded-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300" disabled={!isSeatSelected}>
           تأكيد تسجيل الوصول
         </Button>
         <Button onClick={onBack} size="xl" variant="outline" className="font-bold rounded-full bg-card hover:bg-muted/80 hover:-translate-y-1 transition-all duration-300">
