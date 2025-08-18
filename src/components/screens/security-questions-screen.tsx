@@ -7,7 +7,7 @@ import { z } from "zod";
 import { ScreenWrapper } from "../screen-wrapper";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
-import { Form, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { AlertCircle } from "lucide-react";
 
 interface SecurityQuestionsScreenProps {
