@@ -24,7 +24,7 @@ const prompt = ai.definePrompt({
   prompt: `You are an expert pilot and aviation educator. 
 Your task is to explain the importance of aircraft weight and balance for flight safety.
 The explanation should be simple, engaging, and educational, suitable for students learning about aviation.
-Please provide the explanation in Arabic.
+Please provide the explanation in the Arabic language.
 Keep it concise, around 2-3 short paragraphs.
 Start with a fun fact or an engaging question.
 `,
