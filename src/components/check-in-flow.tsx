@@ -1,17 +1,18 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { WelcomeScreen } from "./screens/welcome-screen";
 import { CheckinFormScreen } from "./screens/checkin-form-screen";
 import { FlightDetailsScreen } from "./screens/flight-details-screen";
 import { BoardingPassScreen } from "./screens/boarding-pass-screen";
 import { AircraftWeightScreen } from "./screens/aircraft-weight-screen";
+import { SecurityQuestionsScreen } from "./screens/security-questions-screen";
 import { useToast } from "@/hooks/use-toast";
 import { findPassenger } from "@/lib/data";
-import type { CheckedInPassenger, Passenger, AircraftWeightInfo } from "@/lib/types";
-import { addCheckedInData, getAccumulatedWeight, resetWeight } from "@/lib/weight-store";
+import type { CheckedInPassenger, AircraftWeightInfo } from "@/lib/types";
+import { addCheckedInData, getAccumulatedWeight } from "@/lib/weight-store";
 
-type Screen = 'welcome' | 'checkinForm' | 'flightDetails' | 'boardingPass' | 'aircraftWeight';
+type Screen = 'welcome' | 'checkinForm' | 'securityQuestions' | 'flightDetails' | 'boardingPass' | 'aircraftWeight';
 
 export function CheckInFlow() {
   const [screen, setScreen] = useState<Screen>('welcome');
@@ -25,7 +26,6 @@ export function CheckInFlow() {
 
   const handleSearch = async (data: { passengerName: string; bookingRef: string; }) => {
     setIsLoading(true);
-    // Simulate network delay
     await new Promise(res => setTimeout(res, 1000));
     
     const passengerData = findPassenger(data.bookingRef, data.passengerName);
@@ -39,10 +39,9 @@ export function CheckInFlow() {
         totalBaggageWeight: 0,
       };
       setCurrentPassenger(passengerWithBookingRef);
-      // Do not auto-select seat anymore
-      setSelectedSeat('');
-      setBaggageCount(passengerData.baggageAllowance.count > 0 ? 1 : 0); // Start with 1 bag if allowed
-      setScreen('flightDetails');
+      setSelectedSeat(''); 
+      setBaggageCount(passengerData.baggageAllowance.count > 0 ? 1 : 0);
+      setScreen('securityQuestions'); // Move to security questions first
       return passengerData;
     } else {
       toast({
@@ -53,6 +52,10 @@ export function CheckInFlow() {
       return null;
     }
   };
+
+  const handleSecurityCheckPassed = () => {
+    setScreen('flightDetails');
+  };
   
   const handleConfirmCheckin = () => {
     if (!currentPassenger || !selectedSeat) return;
@@ -60,7 +63,7 @@ export function CheckInFlow() {
     let finalGate = currentPassenger.gate;
     if (currentPassenger.hasGateChange) {
       const originalGateNumber = parseInt(finalGate.substring(1));
-      finalGate = `${finalGate.charAt(0)}${originalGateNumber + 2}`; // Simulate gate change
+      finalGate = `${finalGate.charAt(0)}${originalGateNumber + 2}`;
     }
 
     const finalBaggageWeight = baggageCount * currentPassenger.baggageAllowance.weight;
@@ -72,9 +75,7 @@ export function CheckInFlow() {
         finalGate: finalGate,
     };
     
-    // Persist weight data for the flight
     addCheckedInData(finalBaggageWeight);
-
     setCurrentPassenger(finalPassenger);
     setScreen('boardingPass');
   };
@@ -104,6 +105,8 @@ export function CheckInFlow() {
         return <WelcomeScreen onStart={() => setScreen('checkinForm')} />;
       case 'checkinForm':
         return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} />;
+      case 'securityQuestions':
+        return <SecurityQuestionsScreen onConfirm={handleSecurityCheckPassed} onBack={() => setScreen('checkinForm')} />;
       case 'flightDetails':
         if (!currentPassenger) return <WelcomeScreen onStart={() => setScreen('checkinForm')} />;
         return (
@@ -114,7 +117,7 @@ export function CheckInFlow() {
             baggageCount={baggageCount}
             onBaggageCountChange={setBaggageCount}
             onConfirm={handleConfirmCheckin}
-            onBack={() => setScreen('checkinForm')}
+            onBack={() => setScreen('securityQuestions')}
           />
         );
       case 'boardingPass':
@@ -128,7 +131,7 @@ export function CheckInFlow() {
           />
         );
       case 'aircraftWeight':
-        if (!aircraftWeightInfo) return null; // Should not happen
+        if (!aircraftWeightInfo) return null;
          return (
             <AircraftWeightScreen 
                 weightInfo={aircraftWeightInfo}

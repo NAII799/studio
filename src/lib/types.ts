@@ -2,6 +2,7 @@ export interface Passenger {
   name: string;
   nameEn: string;
   flight: string;
+  aircraftModel: string;
   origin: string;
   originEn: string;
   destination: string;

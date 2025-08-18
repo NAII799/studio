@@ -8,9 +8,8 @@ import { SeatMap } from "@/components/seat-map";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle, Info, Armchair } from "lucide-react";
+import { AlertTriangle, Armchair, Plane } from "lucide-react";
 
-// Wheelchair icon as an inline SVG component
 const Wheelchair = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
         <circle cx="9" cy="4" r="2"/>
@@ -48,7 +47,6 @@ export function FlightDetailsScreen({
   onBack,
 }: FlightDetailsScreenProps) {
 
-  const baggageWeight = baggageCount * passenger.baggageAllowance.weight;
   const isOverAllowance = baggageCount > passenger.baggageAllowance.count;
   const extraBags = baggageCount - passenger.baggageAllowance.count;
   const extraFee = extraBags * 150; // 150 SAR per extra bag
@@ -83,6 +81,7 @@ export function FlightDetailsScreen({
               <CardHeader><CardTitle className="text-lg text-primary">Flight Information</CardTitle></CardHeader>
               <CardContent>
                  <InfoRow label="رقم الرحلة / Flight" value={passenger.flight} />
+                 <InfoRow label="الطائرة / Aircraft" value={passenger.aircraftModel} />
                  <InfoRow label="من / From" value={`${passenger.origin} / ${passenger.originEn}`} />
                  <InfoRow label="إلى / To" value={`${passenger.destination} / ${passenger.destinationEn}`} />
                  <InfoRow label="الإقلاع / Departure" value={passenger.departure} />

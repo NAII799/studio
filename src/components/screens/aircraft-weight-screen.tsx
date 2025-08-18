@@ -3,7 +3,10 @@
 import type { AircraftWeightInfo } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { ScreenWrapper } from "@/components/screen-wrapper";
-import { Weight, Plane, Luggage, Users } from "lucide-react";
+import { Weight, Plane, Luggage, Users, BrainCircuit, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { explainWeight } from "@/ai/flows/explain-weight-flow";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 interface AircraftWeightScreenProps {
   weightInfo: AircraftWeightInfo;
@@ -22,6 +25,23 @@ const InfoRow = ({ label, value, icon, className }: { label: string; value: stri
 
 
 export function AircraftWeightScreen({ weightInfo, onBack }: AircraftWeightScreenProps) {
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [explanation, setExplanation] = useState<string | null>(null);
+
+  const handleExplain = async () => {
+    setIsGenerating(true);
+    setExplanation(null);
+    try {
+      const result = await explainWeight();
+      setExplanation(result.explanation);
+    } catch(e) {
+        console.error(e);
+        setExplanation("عذراً، حدث خطأ أثناء محاولة شرح أهمية الوزن. يرجى المحاولة مرة أخرى.");
+    } finally {
+        setIsGenerating(false);
+    }
+  };
+
   return (
     <ScreenWrapper className="max-w-2xl text-center">
         <h2 className="text-3xl font-bold text-primary font-headline mb-6">الوزن الكلي للطائرة</h2>
@@ -51,9 +71,21 @@ export function AircraftWeightScreen({ weightInfo, onBack }: AircraftWeightScree
             />
         </div>
 
-        <div className="mt-8">
+        {explanation && (
+            <Alert className="mt-6 text-right bg-amber-50 border-amber-300">
+                <BrainCircuit className="h-5 w-5 text-amber-600" />
+                <AlertTitle className="text-amber-800 font-bold">لماذا وزن الطائرة مهم؟</AlertTitle>
+                <AlertDescription className="text-amber-700 whitespace-pre-wrap">{explanation}</AlertDescription>
+            </Alert>
+        )}
+
+        <div className="mt-8 flex gap-4 justify-center">
              <Button onClick={onBack} size="lg" className="font-bold btn-muted-gradient">
                 العودة
+            </Button>
+             <Button onClick={handleExplain} size="lg" className="font-bold btn-primary-gradient" disabled={isGenerating}>
+                {isGenerating ? <Loader2 className="animate-spin" /> : <BrainCircuit />}
+                لماذا الوزن مهم؟
             </Button>
         </div>
     </ScreenWrapper>
