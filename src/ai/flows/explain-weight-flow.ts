@@ -10,7 +10,7 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const ExplainWeightOutputSchema = z.object({
-  explanation: z.string().describe('A simple, engaging, and educational explanation about the importance of aircraft weight and balance for flight safety, suitable for students. The explanation should be in Arabic.'),
+  explanation: z.string().describe('An explanation in Arabic about the importance of aircraft weight.'),
 });
 export type ExplainWeightOutput = z.infer<typeof ExplainWeightOutputSchema>;
 
@@ -22,11 +22,12 @@ const prompt = ai.definePrompt({
   name: 'explainWeightPrompt',
   output: {schema: ExplainWeightOutputSchema},
   prompt: `You are an expert pilot and aviation educator. 
-Your task is to explain the importance of aircraft weight and balance for flight safety.
+Your task is to first generate an explanation in English about the importance of aircraft weight and balance for flight safety.
 The explanation should be simple, engaging, and educational, suitable for students learning about aviation.
-Please provide the explanation in the Arabic language.
 Keep it concise, around 2-3 short paragraphs.
 Start with a fun fact or an engaging question.
+After generating the English text, you MUST translate the entire explanation into Arabic.
+The final 'explanation' field in the output must ONLY contain the Arabic translation.
 `,
 });
 
