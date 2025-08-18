@@ -8,7 +8,18 @@ import { SeatMap } from "@/components/seat-map";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle, Info, Wheelchair } from "lucide-react";
+import { AlertTriangle, Info } from "lucide-react";
+
+// Wheelchair icon as an inline SVG component
+const Wheelchair = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+        <circle cx="9" cy="4" r="2"/>
+        <path d="M19 13.5a2.5 2.5 0 0 1-5 0V7H9.5a5.5 5.5 0 0 0-5.23 7.21L5.5 22H7l1-3,2-9h3.5"/>
+        <circle cx="17.5" cy="18.5" r="2.5"/>
+        <path d="M14 8h5"/>
+    </svg>
+);
+
 
 interface FlightDetailsScreenProps {
   passenger: CheckedInPassenger;

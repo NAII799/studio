@@ -17,12 +17,6 @@ export default function Home() {
                 animation: 'float 20s infinite linear',
             }}
         />
-        <style jsx global>{`
-          @keyframes float {
-            0% { transform: translateY(0px); }
-            100% { transform: translateY(-100px); }
-          }
-        `}</style>
         <CheckInFlow />
       </main>
       <AirportFooter />
