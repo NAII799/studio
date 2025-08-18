@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
-import { Analytics } from "@genkit-ai/next";
+
 
 export const metadata: Metadata = {
   title: 'Saudia Check-In Kiosk',
@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl">
-       <Analytics />
+       
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

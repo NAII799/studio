@@ -9,7 +9,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const ExplainWeightOutputSchema = z.object({
+const ExplainWeightOutputSchema = z.object({
   explanation: z.string().describe('A simple, engaging, and educational explanation about the importance of aircraft weight and balance for flight safety, suitable for students. The explanation should be in Arabic.'),
 });
 export type ExplainWeightOutput = z.infer<typeof ExplainWeightOutputSchema>;
