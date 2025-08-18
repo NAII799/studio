@@ -16,6 +16,8 @@ export interface Passenger {
   baggageAllowance: { count: number; weight: number };
   checkedBags?: number;
   totalBaggageWeight?: number;
+  specialAssistance?: 'wheelchair' | 'none';
+  hasGateChange?: boolean;
 }
 
 export type PassengerData = {
@@ -26,6 +28,7 @@ export type CheckedInPassenger = Passenger & {
     bookingRef: string;
     checkedBags: number;
     totalBaggageWeight: number;
+    finalGate?: string;
 }
 
 export type AircraftWeightInfo = {

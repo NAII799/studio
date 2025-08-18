@@ -16,7 +16,7 @@ export const passengerDatabase: PassengerData = {
         terminal: '1',
         class: 'اقتصادية',
         classEn: 'Economy',
-        baggageAllowance: { count: 2, weight: 23 },
+        baggageAllowance: { count: 1, weight: 23 },
     },
     'SM8K2L': {
         name: 'SAYIL MASAD SALIH AL-JOHANI',
@@ -33,7 +33,8 @@ export const passengerDatabase: PassengerData = {
         terminal: '1',
         class: 'اقتصادية',
         classEn: 'Economy',
-        baggageAllowance: { count: 2, weight: 23 }
+        baggageAllowance: { count: 2, weight: 23 },
+        specialAssistance: 'wheelchair',
     },
     'MH9P3Q': {
         name: 'MUJHANAD SOHEI AHMAD HAYGAH',
@@ -67,7 +68,8 @@ export const passengerDatabase: PassengerData = {
         terminal: '1',
         class: 'اقتصادية',
         classEn: 'Economy',
-        baggageAllowance: { count: 2, weight: 23 }
+        baggageAllowance: { count: 2, weight: 23 },
+        hasGateChange: true,
     },
     'NS7U8I': {
         name: 'NAIF SALEH FARAJ ALHARBI',

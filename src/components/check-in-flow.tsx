@@ -40,7 +40,7 @@ export function CheckInFlow() {
       };
       setCurrentPassenger(passengerWithBookingRef);
       setSelectedSeat(passengerData.seat);
-      setBaggageCount(0); // Reset baggage count for new passenger
+      setBaggageCount(passengerData.baggageAllowance.count > 0 ? 1 : 0); // Start with 1 bag if allowed
       setScreen('flightDetails');
       return passengerData;
     } else {
@@ -56,12 +56,19 @@ export function CheckInFlow() {
   const handleConfirmCheckin = () => {
     if (!currentPassenger) return;
 
+    let finalGate = currentPassenger.gate;
+    if (currentPassenger.hasGateChange) {
+      const originalGateNumber = parseInt(finalGate.substring(1));
+      finalGate = `${finalGate.charAt(0)}${originalGateNumber + 2}`; // Simulate gate change
+    }
+
     const finalBaggageWeight = baggageCount * currentPassenger.baggageAllowance.weight;
     const finalPassenger: CheckedInPassenger = {
         ...currentPassenger,
         seat: selectedSeat,
         checkedBags: baggageCount,
-        totalBaggageWeight: finalBaggageWeight
+        totalBaggageWeight: finalBaggageWeight,
+        finalGate: finalGate,
     };
     
     // Persist weight data for the flight

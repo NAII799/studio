@@ -3,8 +3,9 @@
 import type { CheckedInPassenger, AircraftWeightInfo } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { ScreenWrapper } from "@/components/screen-wrapper";
-import { CheckCircle, Printer, Weight, RotateCcw } from "lucide-react";
+import { CheckCircle, Printer, Weight, RotateCcw, AlertTriangle } from "lucide-react";
 import { BoardingPassPrint } from "../boarding-pass-print";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 
 interface BoardingPassScreenProps {
@@ -14,8 +15,8 @@ interface BoardingPassScreenProps {
   onShowWeight: () => void;
 }
 
-const InfoRow = ({ label, value, subValue }: { label: string; value: string | number, subValue?: string }) => (
-    <div className="text-right">
+const InfoRow = ({ label, value, subValue, className }: { label: string; value: string | number, subValue?: string, className?:string }) => (
+    <div className={`text-right ${className}`}>
         <h4 className="text-sm uppercase tracking-wider text-primary/70">{label}</h4>
         <p className="text-xl font-bold text-gray-800">{value}</p>
         {subValue && <p className="text-xs text-gray-500">{subValue}</p>}
@@ -25,6 +26,8 @@ const InfoRow = ({ label, value, subValue }: { label: string; value: string | nu
 
 export function BoardingPassScreen({ passenger, onPrint, onNewCheckin, onShowWeight }: BoardingPassScreenProps) {
   const currentDate = new Date().toLocaleDateString('en-CA');
+  const gateChanged = passenger.hasGateChange;
+  const finalGate = passenger.finalGate || passenger.gate;
 
   return (
     <ScreenWrapper className="max-w-xl text-center">
@@ -33,6 +36,16 @@ export function BoardingPassScreen({ passenger, onPrint, onNewCheckin, onShowWei
         <h2 className="text-2xl font-bold text-green-600">تم تسجيل الوصول بنجاح</h2>
         <p className="text-lg text-muted-foreground">Check-in Successful</p>
       </div>
+
+      {gateChanged && (
+        <Alert variant="destructive" className="mb-6 text-right">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>تنبيه: تغيير البوابة</AlertTitle>
+            <AlertDescription>
+                يرجى العلم أنه تم تغيير بوابة المغادرة. البوابة الجديدة هي <span className="font-bold">{finalGate}</span>.
+            </AlertDescription>
+        </Alert>
+      )}
 
       <div id="boarding-pass" className="relative bg-gradient-to-br from-white to-gray-50 border-2 border-dashed border-primary/50 rounded-2xl p-6 my-6 text-right shadow-inner">
         <div className="flex justify-between items-center pb-4 mb-4 border-b-2 border-dashed border-gray-300">
@@ -48,7 +61,16 @@ export function BoardingPassScreen({ passenger, onPrint, onNewCheckin, onShowWei
             <InfoRow label="الرحلة / Flight" value={passenger.flight} subValue={currentDate} />
             <InfoRow label="من / From" value={passenger.originEn} subValue={passenger.origin} />
             <InfoRow label="إلى / To" value={passenger.destinationEn} subValue={passenger.destination} />
-            <InfoRow label="الإقلاع / Departure" value={passenger.departure} subValue={`Gate: ${passenger.gate}`} />
+            <InfoRow 
+              label="الإقلاع / Departure" 
+              value={passenger.departure} 
+              subValue={gateChanged ? `Original Gate: ${passenger.gate}` : `Gate: ${finalGate}`}
+            />
+             <InfoRow 
+                label="البوابة الجديدة / New Gate" 
+                value={finalGate}
+                className={gateChanged ? "text-red-600 font-bold animate-pulse" : ""}
+            />
             <InfoRow label="المقعد / Seat" value={passenger.seat} subValue={passenger.classEn} />
             <InfoRow label="الأمتعة / Baggage" value={`${passenger.checkedBags} Bags`} subValue={`${passenger.totalBaggageWeight} kg`} />
         </div>

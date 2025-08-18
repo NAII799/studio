@@ -6,6 +6,7 @@ interface BoardingPassPrintProps {
 
 export function BoardingPassPrint({ passenger }: BoardingPassPrintProps) {
   const currentDate = new Date().toLocaleDateString('en-CA');
+  const finalGate = passenger.finalGate || passenger.gate;
 
   return (
     <div className="font-sans text-black bg-white p-4" style={{ width: '80mm', direction: 'rtl', textAlign: 'right' }}>
@@ -36,7 +37,7 @@ export function BoardingPassPrint({ passenger }: BoardingPassPrintProps) {
          <div>
           <h4 className="font-bold uppercase text-primary/80 text-[10px]">الإقلاع</h4>
           <p className="font-bold text-sm">{passenger.departure}</p>
-          <p className="text-[10px]">البوابة: {passenger.gate}</p>
+          <p className="text-[10px]">البوابة: {finalGate}</p>
         </div>
         <div>
           <h4 className="font-bold uppercase text-primary/80 text-[10px]">المقعد</h4>
@@ -51,6 +52,18 @@ export function BoardingPassPrint({ passenger }: BoardingPassPrintProps) {
           <p className="font-bold text-sm">{passenger.checkedBags} حقيبة / {passenger.totalBaggageWeight} كجم</p>
         </div>
       </div>
+
+      {passenger.hasGateChange && (
+        <div className="text-center my-2 p-1 bg-red-600 text-white font-bold text-xs">
+          !! تنبيه: تم تغيير البوابة إلى {finalGate} !!
+        </div>
+      )}
+
+      {passenger.specialAssistance === 'wheelchair' && (
+         <div className="text-center my-2 p-1 bg-blue-600 text-white font-bold text-xs">
+          مساعدة خاصة: مطلوب كرسي متحرك
+        </div>
+      )}
 
       <div className="text-center pt-2 mt-2 border-t border-dashed border-black">
         <div className="w-full h-12 bg-black flex items-center justify-center text-white font-mono text-xs tracking-widest overflow-hidden">

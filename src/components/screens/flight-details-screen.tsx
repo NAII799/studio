@@ -8,7 +8,7 @@ import { SeatMap } from "@/components/seat-map";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Info, Wheelchair } from "lucide-react";
 
 interface FlightDetailsScreenProps {
   passenger: CheckedInPassenger;
@@ -39,6 +39,8 @@ export function FlightDetailsScreen({
 
   const baggageWeight = baggageCount * passenger.baggageAllowance.weight;
   const isOverAllowance = baggageCount > passenger.baggageAllowance.count;
+  const extraBags = baggageCount - passenger.baggageAllowance.count;
+  const extraFee = extraBags * 150; // 150 SAR per extra bag
 
   return (
     <div className="w-full max-w-5xl animate-in fade-in-0 duration-500">
@@ -47,6 +49,15 @@ export function FlightDetailsScreen({
         <div className="space-y-6">
           <ScreenWrapper className="w-full max-w-full">
             <h3 className="text-2xl font-bold text-primary mb-4 text-center">معلومات المسافر والرحلة</h3>
+            {passenger.specialAssistance === 'wheelchair' && (
+                <Alert className="mb-4 bg-blue-100 border-blue-300">
+                    <Wheelchair className="h-5 w-5 text-blue-600" />
+                    <AlertTitle className="text-blue-800">طلب مساعدة خاصة</AlertTitle>
+                    <AlertDescription className="text-blue-700">
+                        تم تسجيل طلب كرسي متحرك. يرجى التوجه إلى موظفي الخدمة للمساعدة.
+                    </AlertDescription>
+                </Alert>
+            )}
             <Card className="bg-white/50">
               <CardHeader><CardTitle className="text-lg text-primary">Passenger Information</CardTitle></CardHeader>
               <CardContent>
@@ -85,7 +96,8 @@ export function FlightDetailsScreen({
                  <Input 
                    type="number" 
                    id="baggageCount" 
-                   min="0" 
+                   min="0"
+                   max="10" 
                    value={baggageCount}
                    onChange={(e) => onBaggageCountChange(Math.max(0, parseInt(e.target.value) || 0))}
                    className="h-12 text-center text-xl font-bold rounded-lg"
@@ -96,7 +108,7 @@ export function FlightDetailsScreen({
                    <AlertTriangle className="h-4 w-4" />
                    <AlertTitle>تنبيه: أمتعة زائدة</AlertTitle>
                    <AlertDescription>
-                    لقد تجاوزت الحد المسموح به للأمتعة. قد يتم تطبيق رسوم إضافية.
+                    لقد تجاوزت الحد المسموح به بعدد {extraBags} حقيبة. الرسوم الإضافية المستحقة هي <span className="font-bold">{extraFee} ريال سعودي</span>. للدفع، يرجى التوجه إلى كاونتر خدمة العملاء.
                    </AlertDescription>
                  </Alert>
               )}
