@@ -4,13 +4,13 @@
 import type { CheckedInPassenger } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { ScreenWrapper } from "@/components/screen-wrapper";
-import { CheckCircle, Printer, Weight, RotateCcw, AlertTriangle } from "lucide-react";
+import { CheckCircle, Printer, Weight, RotateCcw, AlertTriangle, Luggage } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AiExplainer } from "../common/ai-explainer";
 
 interface BoardingPassScreenProps {
   passenger: CheckedInPassenger;
-  onPrint: () => void;
+  onPrint: (type: 'boardingPass' | 'baggageTag') => void;
   onNewCheckin: () => void;
   onShowWeight: () => void;
 }
@@ -27,6 +27,7 @@ export function BoardingPassScreen({ passenger, onPrint, onNewCheckin, onShowWei
   const currentDate = new Date().toLocaleDateString('en-CA');
   const gateChanged = passenger.hasGateChange;
   const finalGate = passenger.finalGate || passenger.gate;
+  const hasBags = passenger.checkedBags > 0;
 
   return (
     <ScreenWrapper className="max-w-xl text-center no-print">
@@ -80,8 +81,9 @@ export function BoardingPassScreen({ passenger, onPrint, onNewCheckin, onShowWei
       <p className="text-muted-foreground mb-8">Please be at the gate 30 minutes before departure time.</p>
 
       <div className="flex flex-col gap-6 items-center">
-         <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <Button onClick={onPrint} size="lg" className="font-bold btn-primary-gradient"><Printer /> Print</Button>
+         <div className="flex flex-wrap gap-4 justify-center">
+            <Button onClick={() => onPrint('boardingPass')} size="lg" className="font-bold btn-primary-gradient"><Printer /> Print Boarding Pass</Button>
+            {hasBags && <Button onClick={() => onPrint('baggageTag')} size="lg" className="font-bold btn-primary-gradient"><Luggage /> Print Bag Tag</Button>}
             <Button onClick={onShowWeight} size="lg" className="font-bold btn-muted-gradient"><Weight/> Aircraft Weight</Button>
             <Button onClick={onNewCheckin} size="lg" className="font-bold btn-muted-gradient"><RotateCcw /> New Check-in</Button>
          </div>

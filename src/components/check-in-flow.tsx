@@ -15,10 +15,13 @@ import { addCheckedInData, getAccumulatedWeight, resetWeight } from "@/lib/weigh
 type Screen = 'checkinForm' | 'securityQuestions' | 'flightDetails' | 'boardingPass' | 'aircraftWeight';
 
 interface CheckInFlowProps {
-    onPrintRequest: (passenger: CheckedInPassenger) => void;
+    onCheckinComplete: (passenger: CheckedInPassenger) => void;
+    onPrintRequest: (type: 'boardingPass' | 'baggageTag') => void;
+    onNewCheckin: () => void;
+    checkedInPassenger: CheckedInPassenger | null;
 }
 
-export function CheckInFlow({ onPrintRequest }: CheckInFlowProps) {
+export function CheckInFlow({ onCheckinComplete, onPrintRequest, onNewCheckin, checkedInPassenger }: CheckInFlowProps) {
   const [screen, setScreen] = useState<Screen>('checkinForm');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -81,16 +84,16 @@ export function CheckInFlow({ onPrintRequest }: CheckInFlowProps) {
     
     addCheckedInData(finalBaggageWeight);
     setCurrentPassenger(finalPassenger);
-    onPrintRequest(finalPassenger); // Prepare for printing
+    onCheckinComplete(finalPassenger);
     setScreen('boardingPass');
   };
   
-  const handleNewCheckin = () => {
+  const startNewCheckin = () => {
     setCurrentPassenger(null);
     setSelectedSeat('');
     setBaggageCount(0);
     setAircraftWeightInfo(null);
-    onPrintRequest(null!);
+    onNewCheckin();
     setScreen('checkinForm');
   };
   
@@ -99,10 +102,6 @@ export function CheckInFlow({ onPrintRequest }: CheckInFlowProps) {
     const totalWeight = passengerWeight + baggageWeight + cargoWeight;
     setAircraftWeightInfo({ passengerWeight, baggageWeight, cargoWeight, totalWeight });
     setScreen('aircraftWeight');
-  };
-
-  const handlePrint = () => {
-    window.print();
   };
 
   const renderScreen = () => {
@@ -125,12 +124,12 @@ export function CheckInFlow({ onPrintRequest }: CheckInFlowProps) {
           />
         );
       case 'boardingPass':
-        if (!currentPassenger) return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} />;
+        if (!checkedInPassenger) return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} />;
         return (
           <BoardingPassScreen 
-            passenger={currentPassenger}
-            onPrint={handlePrint}
-            onNewCheckin={handleNewCheckin}
+            passenger={checkedInPassenger}
+            onPrint={onPrintRequest}
+            onNewCheckin={startNewCheckin}
             onShowWeight={handleShowWeight}
           />
         );
