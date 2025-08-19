@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -13,7 +14,11 @@ import { addCheckedInData, getAccumulatedWeight, resetWeight } from "@/lib/weigh
 
 type Screen = 'checkinForm' | 'securityQuestions' | 'flightDetails' | 'boardingPass' | 'aircraftWeight';
 
-export function CheckInFlow() {
+interface CheckInFlowProps {
+    onPrintRequest: (passenger: CheckedInPassenger) => void;
+}
+
+export function CheckInFlow({ onPrintRequest }: CheckInFlowProps) {
   const [screen, setScreen] = useState<Screen>('checkinForm');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -76,6 +81,7 @@ export function CheckInFlow() {
     
     addCheckedInData(finalBaggageWeight);
     setCurrentPassenger(finalPassenger);
+    onPrintRequest(finalPassenger); // Prepare for printing
     setScreen('boardingPass');
   };
   
@@ -84,6 +90,7 @@ export function CheckInFlow() {
     setSelectedSeat('');
     setBaggageCount(0);
     setAircraftWeightInfo(null);
+    onPrintRequest(null!);
     setScreen('checkinForm');
   };
   

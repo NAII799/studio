@@ -1,10 +1,10 @@
+
 "use client";
 
 import type { CheckedInPassenger } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { ScreenWrapper } from "@/components/screen-wrapper";
 import { CheckCircle, Printer, Weight, RotateCcw, AlertTriangle } from "lucide-react";
-import { BoardingPassPrint } from "../boarding-pass-print";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface BoardingPassScreenProps {
@@ -28,7 +28,7 @@ export function BoardingPassScreen({ passenger, onPrint, onNewCheckin, onShowWei
   const finalGate = passenger.finalGate || passenger.gate;
 
   return (
-    <ScreenWrapper className="max-w-xl text-center">
+    <ScreenWrapper className="max-w-xl text-center no-print">
        <div className="text-center mb-6">
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
         <h2 className="text-2xl font-bold text-green-400">Check-in Successful</h2>
@@ -82,10 +82,6 @@ export function BoardingPassScreen({ passenger, onPrint, onNewCheckin, onShowWei
         <Button onClick={onPrint} size="lg" className="font-bold btn-primary-gradient"><Printer /> Print</Button>
         <Button onClick={onShowWeight} size="lg" className="font-bold btn-muted-gradient"><Weight/> Aircraft Weight</Button>
         <Button onClick={onNewCheckin} size="lg" className="font-bold btn-muted-gradient"><RotateCcw /> New Check-in</Button>
-      </div>
-
-      <div className="printable-area">
-          <BoardingPassPrint passenger={passenger} />
       </div>
     </ScreenWrapper>
   );
