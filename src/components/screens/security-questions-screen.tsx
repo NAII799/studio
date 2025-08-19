@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { AlertCircle } from "lucide-react";
+import { AiExplainer } from "../common/ai-explainer";
 
 interface SecurityQuestionsScreenProps {
   onConfirm: () => void;
@@ -122,6 +123,9 @@ export function SecurityQuestionsScreen({ onConfirm, onBack }: SecurityQuestions
           </div>
         </form>
       </Form>
+      <div className="mt-8 border-t border-border pt-4 text-center">
+        <AiExplainer step="securityQuestions" />
+      </div>
     </ScreenWrapper>
   );
 }

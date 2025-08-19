@@ -12,7 +12,7 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const ExplainStepInputSchema = z.object({
-  step: z.enum(['checkinForm', 'flightDetails', 'boardingPass']).describe("The specific step of the check-in process to explain."),
+  step: z.enum(['checkinForm', 'flightDetails', 'boardingPass', 'securityQuestions']).describe("The specific step of the check-in process to explain."),
 });
 export type ExplainStepInput = z.infer<typeof ExplainStepInputSchema>;
 
@@ -51,6 +51,7 @@ Step-specific guidance:
 - **checkinForm:** Focus on how the agent finds the passenger's booking (PNR). This is the starting point.
 - **flightDetails:** This is the core of the process. Emphasize seat assignment and baggage registration as key tasks.
 - **boardingPass:** This is the final output. Explain its importance as a document for the passenger to board the plane.
+- **securityQuestions:** Explain that these are standard, mandatory questions to ensure flight safety. Focus on the agent's responsibility to ask them clearly and get confirmation from the passenger.
 `,
 });
 
