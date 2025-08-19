@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2 } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,8 +12,8 @@ import { ScreenWrapper } from "@/components/screen-wrapper";
 import type { Passenger } from "@/lib/types";
 
 const formSchema = z.object({
-  passengerName: z.string().min(3, { message: "الاسم يجب أن يكون 3 أحرف على الأقل." }),
-  bookingRef: z.string().length(6, { message: "رقم الحجز يجب أن يتكون من 6 أحرف." }).transform(val => val.toUpperCase()),
+  passengerName: z.string().min(3, { message: "Name must be at least 3 characters." }),
+  bookingRef: z.string().length(6, { message: "Booking reference must be 6 characters." }).transform(val => val.toUpperCase()),
 });
 
 interface CheckinFormScreenProps {
@@ -36,22 +36,23 @@ export function CheckinFormScreen({ onSearch, isLoading }: CheckinFormScreenProp
 
   return (
     <ScreenWrapper>
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-primary font-headline mb-8">تسجيل الوصول - Check-in</h2>
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold text-primary mb-2">Passenger Check-in</h2>
+        <p className="text-muted-foreground">Enter passenger name and booking reference (PNR) to proceed.</p>
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-md mx-auto">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-w-sm mx-auto">
           <FormField
             control={form.control}
             name="passengerName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-lg font-bold text-primary">اسم المسافر / Passenger Name</FormLabel>
+                <FormLabel className="font-semibold">Passenger Full Name</FormLabel>
                 <FormControl>
                   <Input 
-                    placeholder="أدخل الاسم الكامل" 
+                    placeholder="e.g. John Doe" 
                     {...field} 
-                    className="h-14 text-lg text-center rounded-xl focus:transform focus:-translate-y-1 transition-transform duration-300"
+                    className="h-11 text-base bg-input"
                     />
                 </FormControl>
                 <FormMessage />
@@ -63,34 +64,36 @@ export function CheckinFormScreen({ onSearch, isLoading }: CheckinFormScreenProp
             name="bookingRef"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-lg font-bold text-primary">رقم الحجز / Booking Reference (PNR)</FormLabel>
+                <FormLabel className="font-semibold">Booking Reference (PNR)</FormLabel>
                 <FormControl>
                   <Input 
-                    placeholder="أدخل رقم الحجز" 
+                    placeholder="e.g. RN4A7B" 
                     maxLength={6}
                     {...field} 
-                    className="h-14 text-lg text-center tracking-[0.2em] uppercase rounded-xl focus:transform focus:-translate-y-1 transition-transform duration-300"
+                    className="h-11 text-base font-mono tracking-widest uppercase bg-input"
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button 
-            type="submit" 
-            size="full"
-            disabled={isLoading}
-            className="font-bold btn-primary-gradient hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-          >
-            {isLoading ? (
-              <Loader2 className="animate-spin" />
-            ) : (
-              <>
-                <span className="btn-text">البحث عن الحجز</span>
-                <span className="btn-text-en opacity-80 text-sm ml-2">/ Search Booking</span>
-              </>
-            )}
-          </Button>
+          <div className="pt-4">
+            <Button 
+              type="submit" 
+              size="full"
+              disabled={isLoading}
+              className="font-bold btn-primary-gradient"
+            >
+              {isLoading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <>
+                  <Search className="mr-2" />
+                  Search Booking
+                </>
+              )}
+            </Button>
+          </div>
         </form>
       </Form>
     </ScreenWrapper>

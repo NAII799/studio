@@ -17,15 +17,14 @@ export function LiveClock() {
         timeZone: 'Asia/Riyadh'
       };
       const dateOptions: Intl.DateTimeFormatOptions = {
-        weekday: 'long',
         year: 'numeric',
-        month: 'long',
-        day: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
         timeZone: 'Asia/Riyadh'
       };
 
-      setTime(now.toLocaleTimeString('ar-SA', timeOptions));
-      setDate(now.toLocaleDateString('ar-SA', dateOptions));
+      setTime(now.toLocaleTimeString('en-GB', timeOptions));
+      setDate(now.toLocaleDateString('en-CA', dateOptions));
     };
 
     updateDateTime();
@@ -35,9 +34,9 @@ export function LiveClock() {
   }, []);
 
   return (
-    <div className="text-right">
-      <div className="text-3xl font-bold text-accent text-shadow" id="currentTime">{time || '...'}</div>
-      <p className="text-base opacity-90 mt-1" id="currentDate">{date || '...'}</p>
+    <div className="text-right font-mono">
+      <div className="text-2xl font-bold text-primary" id="currentTime">{time || '...'}</div>
+      <p className="text-sm text-muted-foreground" id="currentDate">{date || '...'}</p>
     </div>
   );
 }

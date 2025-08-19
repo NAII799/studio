@@ -8,7 +8,7 @@ import { SeatMap } from "@/components/seat-map";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle, Armchair, Plane } from "lucide-react";
+import { AlertTriangle, Armchair, Plane, ChevronRight, Check } from "lucide-react";
 
 const Wheelchair = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -31,9 +31,9 @@ interface FlightDetailsScreenProps {
 }
 
 const InfoRow = ({ label, value }: { label: string; value: string | number }) => (
-  <div className="flex justify-between items-center py-3 border-b border-gray-300/50 last:border-b-0">
-    <span className="font-bold text-primary">{label}</span>
-    <span className="text-gray-700 font-semibold">{value}</span>
+  <div className="flex justify-between items-center py-2 border-b border-border/50 last:border-b-0 text-sm">
+    <span className="font-medium text-muted-foreground">{label}</span>
+    <span className="font-semibold text-foreground">{value}</span>
   </div>
 );
 
@@ -54,66 +54,55 @@ export function FlightDetailsScreen({
 
 
   return (
-    <div className="w-full max-w-5xl animate-in fade-in-0 duration-500">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="w-full max-w-6xl animate-in fade-in-0 duration-500 text-foreground">
+        <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-primary">Flight Details & Seat Selection</h2>
+            <p className="text-muted-foreground">Verify details, select a seat, and add baggage.</p>
+        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left Column: Info */}
-        <div className="space-y-6">
-          <ScreenWrapper className="w-full max-w-full">
-            <h3 className="text-2xl font-bold text-primary mb-4 text-center">معلومات المسافر والرحلة</h3>
+        <div className="lg:col-span-2 space-y-6">
+          <ScreenWrapper className="w-full max-w-full p-0">
+             <Card className="bg-transparent border-0">
+              <CardHeader className="p-4"><CardTitle className="text-base">Passenger Information</CardTitle></CardHeader>
+              <CardContent className="p-4 pt-0">
+                <InfoRow label="Name" value={passenger.nameEn} />
+                <InfoRow label="PNR" value={passenger.bookingRef} />
+                <InfoRow label="Class" value={passenger.classEn} />
+              </CardContent>
+            </Card>
+             <Card className="bg-transparent border-0 border-t rounded-none">
+              <CardHeader className="p-4"><CardTitle className="text-base">Flight Information</CardTitle></CardHeader>
+              <CardContent className="p-4 pt-0">
+                 <InfoRow label="Flight" value={passenger.flight} />
+                 <InfoRow label="Aircraft" value={passenger.aircraftModel} />
+                 <InfoRow label="From" value={passenger.originEn} />
+                 <InfoRow label="To" value={passenger.destinationEn} />
+                 <InfoRow label="Departure" value={passenger.departure} />
+                 <InfoRow label="Gate" value={passenger.gate} />
+              </CardContent>
+            </Card>
             {passenger.specialAssistance === 'wheelchair' && (
-                <Alert className="mb-4 bg-blue-100 border-blue-300">
-                    <Wheelchair className="h-5 w-5 text-blue-600" />
-                    <AlertTitle className="text-blue-800">طلب مساعدة خاصة</AlertTitle>
-                    <AlertDescription className="text-blue-700">
-                        تم تسجيل طلب كرسي متحرك. يرجى التوجه إلى موظفي الخدمة للمساعدة.
+                <div className="p-4 border-t border-border">
+                <Alert className="bg-blue-900/50 border-blue-700">
+                    <Wheelchair className="h-5 w-5 text-blue-300" />
+                    <AlertTitle className="text-blue-200">Special Assistance Request</AlertTitle>
+                    <AlertDescription className="text-blue-300">
+                        Wheelchair assistance has been recorded for this passenger.
                     </AlertDescription>
                 </Alert>
-            )}
-            <Card className="bg-white/50">
-              <CardHeader><CardTitle className="text-lg text-primary">Passenger Information</CardTitle></CardHeader>
-              <CardContent>
-                <InfoRow label="الاسم / Name" value={passenger.name} />
-                <InfoRow label="رقم الحجز / PNR" value={passenger.bookingRef} />
-                <InfoRow label="الدرجة / Class" value={`${passenger.class} / ${passenger.classEn}`} />
-              </CardContent>
-            </Card>
-            <Card className="bg-white/50 mt-4">
-              <CardHeader><CardTitle className="text-lg text-primary">Flight Information</CardTitle></CardHeader>
-              <CardContent>
-                 <InfoRow label="رقم الرحلة / Flight" value={passenger.flight} />
-                 <InfoRow label="الطائرة / Aircraft" value={passenger.aircraftModel} />
-                 <InfoRow label="من / From" value={`${passenger.origin} / ${passenger.originEn}`} />
-                 <InfoRow label="إلى / To" value={`${passenger.destination} / ${passenger.destinationEn}`} />
-                 <InfoRow label="الإقلاع / Departure" value={passenger.departure} />
-                 <InfoRow label="البوابة / Gate" value={passenger.gate} />
-              </CardContent>
-            </Card>
-          </ScreenWrapper>
-        </div>
-
-        {/* Right Column: Actions */}
-        <div className="space-y-6">
-          <ScreenWrapper className="w-full max-w-full">
-            <SeatMap selectedSeat={selectedSeat} onSeatSelect={onSeatSelect} assignedSeat={passenger.seat} />
-            {!isSeatSelected && (
-              <Alert className="mt-4 border-accent/50 bg-accent/10 text-center">
-                  <Armchair className="h-4 w-4" />
-                  <AlertTitle className="font-bold text-accent-foreground/80">تأكيد المقعد</AlertTitle>
-                  <AlertDescription className="text-accent-foreground/90">
-                      الرجاء اختيار مقعد من الخريطة أعلاه لتفعيل زر التأكيد.
-                  </AlertDescription>
-              </Alert>
+                </div>
             )}
           </ScreenWrapper>
           <ScreenWrapper className="w-full max-w-full">
             <div className="baggage-section text-center">
-              <h3 className="text-xl font-bold text-primary mb-4">تسجيل الأمتعة</h3>
-              <div className="bg-primary/5 p-4 rounded-lg border border-primary/20 mb-4 max-w-md mx-auto">
-                 <p>الحد المسموح به: <span className="font-bold">{passenger.baggageAllowance.count}</span> قطع</p>
-                 <p>الوزن لكل قطعة: <span className="font-bold">{passenger.baggageAllowance.weight}</span> كجم</p>
+              <h3 className="text-lg font-bold text-primary mb-4">Baggage Registration</h3>
+              <div className="bg-secondary/50 p-3 rounded-md border border-border mb-4 max-w-md mx-auto text-sm">
+                 <p>Allowance: <span className="font-bold">{passenger.baggageAllowance.count}</span> piece(s)</p>
+                 <p>Weight per piece: <span className="font-bold">{passenger.baggageAllowance.weight}</span> kg</p>
               </div>
               <div className="space-y-2 max-w-xs mx-auto">
-                 <Label htmlFor="baggageCount" className="font-bold text-primary">عدد الحقائب</Label>
+                 <Label htmlFor="baggageCount" className="font-semibold">Number of Bags</Label>
                  <Input 
                    type="number" 
                    id="baggageCount" 
@@ -121,28 +110,45 @@ export function FlightDetailsScreen({
                    max="10" 
                    value={baggageCount}
                    onChange={(e) => onBaggageCountChange(Math.max(0, parseInt(e.target.value) || 0))}
-                   className="h-12 text-center text-xl font-bold rounded-lg"
+                   className="h-12 text-center text-xl font-bold rounded-lg bg-input"
                  />
               </div>
               {isOverAllowance && (
-                 <Alert variant="destructive" className="mt-4 max-w-md mx-auto text-right">
+                 <Alert variant="destructive" className="mt-4 max-w-md mx-auto text-left text-sm">
                    <AlertTriangle className="h-4 w-4" />
-                   <AlertTitle>تنبيه: أمتعة زائدة</AlertTitle>
+                   <AlertTitle>Excess Baggage Warning</AlertTitle>
                    <AlertDescription>
-                    لقد تجاوزت الحد المسموح به بعدد {extraBags} حقيبة. الرسوم الإضافية المستحقة هي <span className="font-bold">{extraFee} ريال سعودي</span>. للدفع، يرجى التوجه إلى كاونتر خدمة العملاء.
+                    Allowance exceeded by {extraBags} bag(s). Fee: <span className="font-bold">{extraFee} SAR</span>. Please proceed to a service counter for payment.
                    </AlertDescription>
                  </Alert>
               )}
             </div>
           </ScreenWrapper>
         </div>
+
+        {/* Right Column: Actions */}
+        <div className="lg:col-span-3">
+          <ScreenWrapper className="w-full max-w-full">
+            <SeatMap selectedSeat={selectedSeat} onSeatSelect={onSeatSelect} assignedSeat={passenger.seat} />
+            {!isSeatSelected && (
+              <Alert className="mt-4 border-yellow-500/50 bg-yellow-900/30 text-center">
+                  <Armchair className="h-4 w-4 text-yellow-400" />
+                  <AlertTitle className="font-bold text-yellow-300">Confirm Seat</AlertTitle>
+                  <AlertDescription className="text-yellow-400">
+                      Please select a seat from the map to enable the confirmation button.
+                  </AlertDescription>
+              </Alert>
+            )}
+          </ScreenWrapper>
+        </div>
       </div>
       <div className="flex gap-4 justify-center mt-8">
-        <Button onClick={onConfirm} size="xl" className="font-bold btn-success-gradient rounded-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300" disabled={!isSeatSelected}>
-          تأكيد تسجيل الوصول
+         <Button onClick={onBack} size="xl" variant="outline" className="font-bold rounded-md bg-secondary hover:bg-secondary/80 hover:-translate-y-px transition-all duration-300">
+          Back
         </Button>
-        <Button onClick={onBack} size="xl" variant="outline" className="font-bold rounded-full bg-card hover:bg-muted/80 hover:-translate-y-1 transition-all duration-300">
-          رجوع
+        <Button onClick={onConfirm} size="xl" className="font-bold btn-success-gradient rounded-md hover:shadow-xl hover:-translate-y-px transition-all duration-300" disabled={!isSeatSelected}>
+          <Check className="mr-2"/>
+          Confirm Check-in
         </Button>
       </div>
     </div>

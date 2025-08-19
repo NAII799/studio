@@ -19,7 +19,7 @@ export function SeatMap({ selectedSeat, onSeatSelect, assignedSeat }: SeatMapPro
       for (let j = 0; j < cols.length; j++) {
         const col = cols[j];
         if (col === '') {
-          seatGrid.push(<div key={`aisle-${i}-${j}`} className="w-full h-10"></div>);
+          seatGrid.push(<div key={`aisle-${i}-${j}`} className="w-full h-8 flex items-center justify-center text-muted-foreground text-xs font-mono">{i}</div>);
           continue;
         }
 
@@ -33,15 +33,15 @@ export function SeatMap({ selectedSeat, onSeatSelect, assignedSeat }: SeatMapPro
             onClick={() => onSeatSelect(seatLabel)}
             disabled={isOccupied}
             className={cn(
-              "w-full h-10 border-2 rounded-lg flex items-center justify-center font-bold text-sm transition-all duration-300",
+              "w-full h-8 border rounded-md flex items-center justify-center font-bold text-xs transition-all duration-200",
               {
-                "bg-green-100 border-green-500 text-green-800 hover:bg-green-200 cursor-pointer": !isOccupied && !isSelected,
-                "bg-red-100 border-red-400 text-red-800 cursor-not-allowed": isOccupied,
-                "bg-primary border-primary text-primary-foreground transform scale-110 ring-2 ring-accent": isSelected,
+                "bg-secondary border-border text-foreground hover:bg-primary/20 hover:border-primary cursor-pointer": !isOccupied && !isSelected,
+                "bg-red-900/50 border-red-700 text-red-300 cursor-not-allowed line-through": isOccupied,
+                "bg-primary border-primary-foreground text-primary-foreground transform scale-110 ring-2 ring-primary-foreground": isSelected,
               }
             )}
           >
-            {seatLabel}
+            {col}
           </button>
         );
       }
@@ -51,14 +51,14 @@ export function SeatMap({ selectedSeat, onSeatSelect, assignedSeat }: SeatMapPro
 
   return (
     <div className="text-center">
-      <h3 className="text-xl font-bold text-primary mb-4">اختر مقعدك</h3>
-      <div className="grid grid-cols-7 gap-2 max-w-sm mx-auto my-4">
+      <h3 className="text-lg font-bold text-primary mb-4">Seat Map</h3>
+      <div className="grid grid-cols-7 gap-1.5 max-w-sm mx-auto my-4 p-4 bg-secondary/30 rounded-lg border border-border">
         {renderSeats()}
       </div>
       <div className="flex justify-center gap-4 text-xs mt-4 text-muted-foreground">
-        <div className="flex items-center gap-2"><div className="w-4 h-4 rounded bg-green-100 border-2 border-green-500"></div> متاح</div>
-        <div className="flex items-center gap-2"><div className="w-4 h-4 rounded bg-red-100 border-2 border-red-400"></div> محجوز</div>
-        <div className="flex items-center gap-2"><div className="w-4 h-4 rounded bg-primary border-2 border-primary"></div> مختار</div>
+        <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-sm bg-secondary border border-border"></div> Available</div>
+        <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-sm bg-red-900/50 border border-red-700"></div> Occupied</div>
+        <div className="flex items-center gap-2"><div className="w-4 h-4 rounded-sm bg-primary border-primary-foreground"></div> Selected</div>
       </div>
     </div>
   );

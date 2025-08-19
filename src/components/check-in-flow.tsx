@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { WelcomeScreen } from "./screens/welcome-screen";
 import { CheckinFormScreen } from "./screens/checkin-form-screen";
 import { FlightDetailsScreen } from "./screens/flight-details-screen";
 import { BoardingPassScreen } from "./screens/boarding-pass-screen";
@@ -10,12 +9,12 @@ import { SecurityQuestionsScreen } from "./screens/security-questions-screen";
 import { useToast } from "@/hooks/use-toast";
 import { findPassenger } from "@/lib/data";
 import type { CheckedInPassenger, AircraftWeightInfo } from "@/lib/types";
-import { addCheckedInData, getAccumulatedWeight } from "@/lib/weight-store";
+import { addCheckedInData, resetWeight } from "@/lib/weight-store";
 
-type Screen = 'welcome' | 'checkinForm' | 'securityQuestions' | 'flightDetails' | 'boardingPass' | 'aircraftWeight';
+type Screen = 'checkinForm' | 'securityQuestions' | 'flightDetails' | 'boardingPass' | 'aircraftWeight';
 
 export function CheckInFlow() {
-  const [screen, setScreen] = useState<Screen>('welcome');
+  const [screen, setScreen] = useState<Screen>('checkinForm');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -26,7 +25,7 @@ export function CheckInFlow() {
 
   const handleSearch = async (data: { passengerName: string; bookingRef: string; }) => {
     setIsLoading(true);
-    await new Promise(res => setTimeout(res, 1000));
+    await new Promise(res => setTimeout(res, 500));
     
     const passengerData = findPassenger(data.bookingRef, data.passengerName);
     
@@ -46,8 +45,8 @@ export function CheckInFlow() {
     } else {
       toast({
         variant: "destructive",
-        title: "خطأ في البحث",
-        description: "اسم المسافر أو رقم الحجز غير صحيح. يرجى التحقق والمحاولة مرة أخرى.",
+        title: "Search Error",
+        description: "Passenger name or PNR is incorrect. Please verify and try again.",
       });
       return null;
     }
@@ -85,7 +84,7 @@ export function CheckInFlow() {
     setSelectedSeat('');
     setBaggageCount(0);
     setAircraftWeightInfo(null);
-    setScreen('welcome');
+    setScreen('checkinForm');
   };
   
   const handleShowWeight = () => {
@@ -101,14 +100,12 @@ export function CheckInFlow() {
 
   const renderScreen = () => {
     switch (screen) {
-      case 'welcome':
-        return <WelcomeScreen onStart={() => setScreen('checkinForm')} />;
       case 'checkinForm':
         return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} />;
       case 'securityQuestions':
         return <SecurityQuestionsScreen onConfirm={handleSecurityCheckPassed} onBack={() => setScreen('checkinForm')} />;
       case 'flightDetails':
-        if (!currentPassenger) return <WelcomeScreen onStart={() => setScreen('checkinForm')} />;
+        if (!currentPassenger) return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} />;
         return (
           <FlightDetailsScreen 
             passenger={currentPassenger}
@@ -121,7 +118,7 @@ export function CheckInFlow() {
           />
         );
       case 'boardingPass':
-        if (!currentPassenger) return <WelcomeScreen onStart={() => setScreen('checkinForm')} />;
+        if (!currentPassenger) return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} />;
         return (
           <BoardingPassScreen 
             passenger={currentPassenger}
@@ -139,7 +136,7 @@ export function CheckInFlow() {
             />
          );
       default:
-        return <WelcomeScreen onStart={() => setScreen('checkinForm')} />;
+        return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} />;
     }
   };
 

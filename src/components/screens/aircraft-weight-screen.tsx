@@ -14,12 +14,12 @@ interface AircraftWeightScreenProps {
 }
 
 const InfoRow = ({ label, value, icon, className }: { label: string; value: string | number, icon: React.ReactNode, className?: string }) => (
-  <div className={`flex justify-between items-center py-4 border-b border-primary/20 last:border-b-0 ${className}`}>
+  <div className={`flex justify-between items-center py-3 border-b border-border/50 last:border-b-0 ${className}`}>
     <div className="flex items-center gap-4">
         {icon}
-        <span className="font-bold text-primary text-lg">{label}</span>
+        <span className="font-semibold text-lg text-foreground">{label}</span>
     </div>
-    <span className="text-gray-800 font-bold text-lg">{value} كجم</span>
+    <span className="font-mono font-bold text-lg">{value} kg</span>
   </div>
 );
 
@@ -36,7 +36,7 @@ export function AircraftWeightScreen({ weightInfo, onBack }: AircraftWeightScree
       setExplanation(result.explanation);
     } catch(e) {
         console.error(e);
-        setExplanation("عذراً، حدث خطأ أثناء محاولة شرح أهمية الوزن. يرجى المحاولة مرة أخرى.");
+        setExplanation("Sorry, an error occurred while trying to explain the importance of weight. Please try again.");
     } finally {
         setIsGenerating(false);
     }
@@ -44,48 +44,48 @@ export function AircraftWeightScreen({ weightInfo, onBack }: AircraftWeightScree
 
   return (
     <ScreenWrapper className="max-w-2xl text-center">
-        <h2 className="text-3xl font-bold text-primary font-headline mb-6">الوزن الكلي للطائرة</h2>
-        <p className="text-muted-foreground mb-8">Aircraft Total Weight Information</p>
+        <h2 className="text-2xl font-bold text-primary mb-2">Aircraft Total Weight</h2>
+        <p className="text-muted-foreground mb-8">Aggregated weight information for the flight.</p>
         
-        <div className="bg-blue-500/10 p-6 rounded-2xl border border-blue-500/20 text-right space-y-2">
+        <div className="bg-secondary/50 p-6 rounded-lg border border-border text-left space-y-2">
             <InfoRow 
-                label="وزن الركاب / Passengers" 
+                label="Passengers Weight" 
                 value={weightInfo.passengerWeight.toLocaleString()}
-                icon={<Users className="w-8 h-8 text-primary"/>}
+                icon={<Users className="w-7 h-7 text-primary"/>}
              />
             <InfoRow 
-                label="وزن الأمتعة / Baggage" 
+                label="Baggage Weight" 
                 value={weightInfo.baggageWeight.toLocaleString()}
-                icon={<Luggage className="w-8 h-8 text-primary"/>}
+                icon={<Luggage className="w-7 h-7 text-primary"/>}
              />
             <InfoRow 
-                label="وزن الشحن / Cargo" 
+                label="Cargo Weight" 
                 value={weightInfo.cargoWeight.toLocaleString()}
-                icon={<Plane className="w-8 h-8 text-primary"/>}
+                icon={<Plane className="w-7 h-7 text-primary"/>}
             />
              <InfoRow 
-                label="الإجمالي / Total" 
+                label="Total Weight" 
                 value={weightInfo.totalWeight.toLocaleString()}
-                icon={<Weight className="w-8 h-8 text-blue-600"/>}
-                className="bg-blue-600/10 rounded-lg px-4 -mx-4"
+                icon={<Weight className="w-7 h-7 text-green-400"/>}
+                className="bg-green-900/30 rounded-lg px-4 -mx-4"
             />
         </div>
 
         {explanation && (
-            <Alert className="mt-6 text-right bg-amber-50 border-amber-300">
-                <BrainCircuit className="h-5 w-5 text-amber-600" />
-                <AlertTitle className="text-amber-800 font-bold">لماذا وزن الطائرة مهم؟</AlertTitle>
-                <AlertDescription className="text-amber-700 whitespace-pre-wrap">{explanation}</AlertDescription>
+            <Alert className="mt-6 text-left bg-blue-900/50 border-blue-700">
+                <BrainCircuit className="h-5 w-5 text-blue-300" />
+                <AlertTitle className="text-blue-200 font-bold">Why is aircraft weight important?</AlertTitle>
+                <AlertDescription className="text-blue-300 whitespace-pre-wrap">{explanation}</AlertDescription>
             </Alert>
         )}
 
         <div className="mt-8 flex gap-4 justify-center">
              <Button onClick={onBack} size="lg" className="font-bold btn-muted-gradient">
-                العودة
+                Back
             </Button>
              <Button onClick={handleExplain} size="lg" className="font-bold btn-primary-gradient" disabled={isGenerating}>
                 {isGenerating ? <Loader2 className="animate-spin" /> : <BrainCircuit />}
-                لماذا الوزن مهم؟
+                Why is weight important?
             </Button>
         </div>
     </ScreenWrapper>

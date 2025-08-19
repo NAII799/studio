@@ -4,57 +4,58 @@
 
 @layer base {
   :root {
-    --background: 220 17% 95%; /* #F0F2F5 For cards/screens */
-    --foreground: 224 71.4% 4.1%;
+    --background: 222 47% 11%; /* #111827 - Dark Blue/Grey */
+    --foreground: 210 40% 98%; /* #f9fafb */
 
-    --card: 220 17% 95%;
-    --card-foreground: 224 71.4% 4.1%;
+    --card: 222 47% 15%; /* #1a2233 */
+    --card-foreground: 210 40% 98%;
 
-    --popover: 220 17% 95%;
-    --popover-foreground: 224 71.4% 4.1%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 161 65% 29%; /* #1A7A5E */
-    --primary-foreground: 0 0% 100%;
+    --primary: 210 40% 98%; /* White text/icons */
+    --primary-foreground: 222 47% 11%; /* Dark Blue for text on primary buttons */
 
-    --secondary: 220 13% 91%;
-    --secondary-foreground: 220.9 39.3% 11%;
+    --secondary: 217 33% 17%; /* #202a3a */
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 220 13% 91%;
-    --muted-foreground: 220 8.9% 46.1%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%; /* #939cb0 */
 
-    --accent: 47 100% 69%; /* #FFDA63 */
-    --accent-foreground: 47 100% 10%;
+    --accent: 210 40% 98%;
+    --accent-foreground: 222 47% 11%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 63% 31%; /* #991b1b */
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 161 65% 29%;
+    --border: 217 33% 25%; /* #313d52 */
+    --input: 217 33% 20%; /* #283347 */
+    --ring: 215 20% 65%;
 
-    --radius: 0.5rem;
+    --radius: 0.3rem;
   }
 
   .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 161 65% 35%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 47 100% 75%;
-    --accent-foreground: 47 100% 10%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 161 65% 35%;
+    /* Keeping dark theme same as light for this corporate look */
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 15%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 210 40% 98%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 25%;
+    --input: 217 33% 20%;
+    --ring: 215 20% 65%;
   }
 }
 
@@ -63,26 +64,27 @@
     @apply border-border;
   }
   body {
-    @apply text-foreground;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   .btn-primary-gradient {
-     @apply bg-gradient-to-r from-primary to-[hsl(161,70%,20%)] text-primary-foreground;
+     @apply bg-primary text-primary-foreground font-semibold hover:bg-primary/90;
   }
-
+  
   .btn-success-gradient {
-    @apply bg-gradient-to-r from-green-500 to-emerald-500 text-white;
+    @apply bg-green-600 text-white hover:bg-green-700;
   }
 
   .btn-muted-gradient {
-    @apply bg-gradient-to-r from-slate-600 to-slate-700 text-white;
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
   }
 }
 
 @layer utilities {
     .text-shadow {
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        text-shadow: none;
     }
 }
 
@@ -109,14 +111,4 @@
   .no-print {
     display: none !important;
   }
-}
-
-@keyframes float {
-  0% { transform: translateY(0px); }
-  100% { transform: translateY(-100px); }
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
 }
