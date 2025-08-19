@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertTriangle, Armchair, Plane, ChevronRight, Check } from "lucide-react";
+import { AiExplainer } from "../common/ai-explainer";
 
 const Wheelchair = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -142,15 +143,18 @@ export function FlightDetailsScreen({
           </ScreenWrapper>
         </div>
       </div>
-      <div className="flex gap-4 justify-center mt-8">
-         <Button onClick={onBack} size="xl" variant="outline" className="font-bold rounded-md bg-secondary hover:bg-secondary/80 hover:-translate-y-px transition-all duration-300">
-          Back
-        </Button>
-        <Button onClick={onConfirm} size="xl" className="font-bold btn-success-gradient rounded-md hover:shadow-xl hover:-translate-y-px transition-all duration-300" disabled={!isSeatSelected}>
-          <Check className="mr-2"/>
-          Confirm Check-in
-        </Button>
-      </div>
+       <div className="w-full mt-8 pt-6 border-t border-border flex flex-col items-center gap-6">
+            <div className="flex gap-4 justify-center">
+                <Button onClick={onBack} size="xl" variant="outline" className="font-bold rounded-md bg-secondary hover:bg-secondary/80 hover:-translate-y-px transition-all duration-300">
+                Back
+                </Button>
+                <Button onClick={onConfirm} size="xl" className="font-bold btn-success-gradient rounded-md hover:shadow-xl hover:-translate-y-px transition-all duration-300" disabled={!isSeatSelected}>
+                <Check className="mr-2"/>
+                Confirm Check-in
+                </Button>
+            </div>
+            <AiExplainer step="flightDetails" />
+        </div>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ScreenWrapper } from "@/components/screen-wrapper";
 import { CheckCircle, Printer, Weight, RotateCcw, AlertTriangle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AiExplainer } from "../common/ai-explainer";
 
 interface BoardingPassScreenProps {
   passenger: CheckedInPassenger;
@@ -78,10 +79,15 @@ export function BoardingPassScreen({ passenger, onPrint, onNewCheckin, onShowWei
       
       <p className="text-muted-foreground mb-8">Please be at the gate 30 minutes before departure time.</p>
 
-      <div className="flex flex-col md:flex-row gap-4 justify-center">
-        <Button onClick={onPrint} size="lg" className="font-bold btn-primary-gradient"><Printer /> Print</Button>
-        <Button onClick={onShowWeight} size="lg" className="font-bold btn-muted-gradient"><Weight/> Aircraft Weight</Button>
-        <Button onClick={onNewCheckin} size="lg" className="font-bold btn-muted-gradient"><RotateCcw /> New Check-in</Button>
+      <div className="flex flex-col gap-6 items-center">
+         <div className="flex flex-col md:flex-row gap-4 justify-center">
+            <Button onClick={onPrint} size="lg" className="font-bold btn-primary-gradient"><Printer /> Print</Button>
+            <Button onClick={onShowWeight} size="lg" className="font-bold btn-muted-gradient"><Weight/> Aircraft Weight</Button>
+            <Button onClick={onNewCheckin} size="lg" className="font-bold btn-muted-gradient"><RotateCcw /> New Check-in</Button>
+         </div>
+         <div className="w-full mt-2 pt-6 border-t border-border">
+            <AiExplainer step="boardingPass" />
+         </div>
       </div>
     </ScreenWrapper>
   );

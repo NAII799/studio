@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ScreenWrapper } from "@/components/screen-wrapper";
 import type { Passenger } from "@/lib/types";
+import { AiExplainer } from "../common/ai-explainer";
 
 const formSchema = z.object({
   passengerName: z.string().min(3, { message: "Name must be at least 3 characters." }),
@@ -96,6 +97,9 @@ export function CheckinFormScreen({ onSearch, isLoading }: CheckinFormScreenProp
           </div>
         </form>
       </Form>
+      <div className="mt-8 border-t border-border pt-4 text-center">
+         <AiExplainer step="checkinForm" />
+      </div>
     </ScreenWrapper>
   );
 }
