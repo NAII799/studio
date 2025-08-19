@@ -46,10 +46,10 @@ export function AiExplainer({ step, className }: AiExplainerProps) {
       </Button>
 
       {(explanation || error) && (
-        <Alert className={`mt-4 text-left ${error ? 'bg-red-900/50 border-red-700' : 'bg-blue-900/50 border-blue-700'}`}>
+        <Alert dir="rtl" className={`mt-4 text-right ${error ? 'bg-red-900/50 border-red-700' : 'bg-blue-900/50 border-blue-700'}`}>
           <BrainCircuit className={`h-5 w-5 ${error ? 'text-red-300' : 'text-blue-300'}`} />
           <AlertTitle className={`font-bold ${error ? 'text-red-200' : 'text-blue-200'}`}>
-            {error ? 'Error' : 'AI Step Explanation'}
+            {error ? 'Error' : 'شرح الخطوة بواسطة الذكاء الاصطناعي'}
           </AlertTitle>
           <AlertDescription className={`whitespace-pre-wrap ${error ? 'text-red-300' : 'text-blue-300'}`}>
             {error || explanation}

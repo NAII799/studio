@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { AircraftWeightInfo } from "@/lib/types";
@@ -72,9 +73,9 @@ export function AircraftWeightScreen({ weightInfo, onBack }: AircraftWeightScree
         </div>
 
         {explanation && (
-            <Alert className="mt-6 text-left bg-blue-900/50 border-blue-700">
+            <Alert dir="rtl" className="mt-6 text-right bg-blue-900/50 border-blue-700">
                 <BrainCircuit className="h-5 w-5 text-blue-300" />
-                <AlertTitle className="text-blue-200 font-bold">Why is aircraft weight important?</AlertTitle>
+                <AlertTitle className="text-blue-200 font-bold">لماذا يعتبر وزن الطائرة مهمًا؟</AlertTitle>
                 <AlertDescription className="text-blue-300 whitespace-pre-wrap">{explanation}</AlertDescription>
             </Alert>
         )}
