@@ -191,3 +191,5 @@ export function BoardingPassPrint({ passenger }: { passenger: CheckedInPassenger
     </div>
   );
 }
+
+    
