@@ -50,7 +50,7 @@ The entire output must be in Arabic and in a JSON object with a single key "expl
 Step-specific guidance:
 - **checkinForm:** Focus on how the agent finds the passenger's booking (PNR). This is the starting point.
 - **flightDetails:** This is the core of the process. Emphasize seat assignment and baggage registration as key tasks.
-- **boardingPass:** This is the final output. Explain its importance as a document for the passenger to board the plane.
+- **boardingPass:** This is the final output. Explain its importance as a document for the passenger to board the plane, AND also explain the importance of the baggage tag and how it ensures the luggage gets to the correct destination.
 - **securityQuestions:** Explain that these are standard, mandatory questions to ensure flight safety. Focus on the agent's responsibility to ask them clearly and get confirmation from the passenger.
 `,
 });
