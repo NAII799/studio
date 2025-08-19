@@ -12,14 +12,14 @@ export default function Home() {
   const [passengerToPrint, setPassengerToPrint] = useState<CheckedInPassenger | null>(null);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-background no-print">
       <AirportHeader />
       <main className="flex-1 flex flex-col items-center justify-center p-4 md:p-10">
         <CheckInFlow onPrintRequest={setPassengerToPrint} />
       </main>
       <AirportFooter />
       {passengerToPrint && (
-        <div className="printable-area">
+        <div className="printable-area hidden">
           <BoardingPassPrint passenger={passengerToPrint} />
         </div>
       )}
