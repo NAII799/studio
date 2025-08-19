@@ -9,7 +9,7 @@ import { SecurityQuestionsScreen } from "./screens/security-questions-screen";
 import { useToast } from "@/hooks/use-toast";
 import { findPassenger } from "@/lib/data";
 import type { CheckedInPassenger, AircraftWeightInfo } from "@/lib/types";
-import { addCheckedInData, resetWeight } from "@/lib/weight-store";
+import { addCheckedInData, getAccumulatedWeight, resetWeight } from "@/lib/weight-store";
 
 type Screen = 'checkinForm' | 'securityQuestions' | 'flightDetails' | 'boardingPass' | 'aircraftWeight';
 
