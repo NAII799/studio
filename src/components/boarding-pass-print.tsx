@@ -10,26 +10,46 @@ const SaudiaLogo = ({ className }: { className?: string }) => (
     </div>
 );
 
-const BarcodeStub = () => (
-    <div className="w-16 border-l-2 border-dashed border-gray-300 flex flex-col ml-2 pl-2 text-center h-full">
-        <SaudiaLogo className="mb-4"/>
-        <div className="space-y-2">
-            <div>
-                 <p className="text-[8px] text-gray-500">FLIGHT</p>
-                 <p className="font-bold text-sm">SV154</p>
-            </div>
-             <div>
-                 <p className="text-[8px] text-gray-500">DATE</p>
-                 <p className="font-bold text-sm">28JUL</p>
-            </div>
-            <div>
-                 <p className="text-[8px] text-gray-500">SEAT</p>
-                 <p className="font-bold text-sm">6A</p>
-            </div>
-        </div>
-        <div className="mt-auto text-xs text-gray-600">
-            <p>ECONOMY</p>
-        </div>
+const BarcodePlaceholder = ({ className }: { className?: string }) => (
+    <div className={`w-full h-12 bg-gray-200 flex items-center justify-center ${className}`}>
+        <svg width="80%" height="80%" viewBox="0 0 150 30" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="150" height="30" fill="#E5E7EB"/>
+            <g fill="#374151">
+                <rect x="5" y="5" width="2" height="20" />
+                <rect x="9" y="5" width="1" height="20" />
+                <rect x="12" y="5" width="4" height="20" />
+                <rect x="18" y="5" width="2" height="20" />
+                <rect x="22" y="5" width="1" height="20" />
+                <rect x="25" y="5" width="3" height="20" />
+                <rect x="30" y="5" width="1" height="20" />
+                <rect x="33" y="5" width="2" height="20" />
+                <rect x="37" y="5" width="5" height="20" />
+                <rect x="44" y="5" width="1" height="20" />
+                <rect x="47" y="5" width="3" height="20" />
+                <rect x="52" y="5" width="2" height="20" />
+                <rect x="56" y="5" width="1" height="20" />
+                <rect x="59" y="5" width="4" height="20" />
+                <rect x="65" y="5" width="2" height="20" />
+                <rect x="69" y="5" width="1" height="20" />
+                <rect x="72" y="5" width="3" height="20" />
+                <rect x="77" y="5" width="1" height="20" />
+                <rect x="80" y="5" width="2" height="20" />
+                <rect x="84" y="5" width="5" height="20" />
+                <rect x="91" y="5" width="1" height="20" />
+                <rect x="94" y="5" width="3" height="20" />
+                <rect x="99" y="5" width="2" height="20" />
+                <rect x="103" y="5" width="1" height="20" />
+                <rect x="106" y="5" width="4" height="20" />
+                <rect x="112" y="5" width="2" height="20" />
+                <rect x="116" y="5" width="1" height="20" />
+                <rect x="119" y="5" width="3" height="20" />
+                <rect x="124" y="5" width="1" height="20" />
+                <rect x="127" y="5" width="2" height="20" />
+                <rect x="131" y="5" width="5" height="20" />
+                <rect x="138" y="5" width="1" height="20" />
+                <rect x="141" y="5" width="3" height="20" />
+            </g>
+        </svg>
     </div>
 );
 
@@ -67,7 +87,7 @@ export function BoardingPassPrint({ passenger }: { passenger: CheckedInPassenger
 
   return (
     <div className="font-sans text-black bg-white w-full h-full p-4 flex justify-center items-center">
-        <div className="w-[26rem] h-[16rem] p-3 border border-gray-300 rounded-lg bg-white shadow-none flex flex-col justify-between">
+        <div className="w-[26rem] h-[16rem] p-3 border border-gray-300 rounded-lg bg-white shadow-none flex flex-col justify-between relative">
             
             {/* Top section */}
             <div className="flex-none">
@@ -78,14 +98,17 @@ export function BoardingPassPrint({ passenger }: { passenger: CheckedInPassenger
                         <p className="text-xs text-gray-600">بطاقة صعود الطائرة</p>
                     </div>
                 </div>
-                <div className="mt-1">
-                    <p className="text-xs text-gray-500 font-medium">NAME OF PASSENGER</p>
-                    <p className="text-base font-bold tracking-wider">{passenger.nameEn}</p>
+                <div className="mt-1 flex justify-between items-end pr-28">
+                    <div>
+                        <p className="text-xs text-gray-500 font-medium">NAME OF PASSENGER</p>
+                        <p className="text-base font-bold tracking-wider">{passenger.nameEn}</p>
+                    </div>
                 </div>
             </div>
 
             {/* Middle Section */}
-            <div className="flex-grow flex flex-col justify-center">
+            <div className="flex-grow flex flex-col justify-center space-y-2">
+                 <BarcodePlaceholder className="my-1"/>
                  <div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-center -mt-2">
                     <FlightLeg 
                         airport="JED"
@@ -156,7 +179,8 @@ export function BoardingPassPrint({ passenger }: { passenger: CheckedInPassenger
                          <p className="font-bold text-base">{passenger.seat}</p>
                     </div>
                 </div>
-                <div className="shrink-0 text-center text-xs text-gray-600">
+                 <BarcodePlaceholder className="h-8 w-full mt-2"/>
+                <div className="shrink-0 text-center text-xs text-gray-600 mt-2">
                     <p>ECONOMY</p>
                 </div>
                 <div className="absolute bottom-0 right-0 h-full w-4 flex items-center justify-center -rotate-180">
