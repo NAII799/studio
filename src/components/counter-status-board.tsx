@@ -15,6 +15,8 @@ import { useToast } from "@/hooks/use-toast";
 
 const COUNTER_STATE_KEY = 'counterState';
 const LAST_COUNTER_RESET_KEY = 'lastCounterReset';
+const DATA_VERSION_KEY = 'counterDataVersion';
+const CURRENT_DATA_VERSION = '1.1'; // Increment this when initialCounterData changes
 const ONE_HOUR = 60 * 60 * 1000;
 
 interface CounterStatusBoardProps {
@@ -33,23 +35,30 @@ export function CounterStatusBoard({ isInteractive = false }: CounterStatusBoard
         try {
             const savedState = localStorage.getItem(COUNTER_STATE_KEY);
             const lastReset = localStorage.getItem(LAST_COUNTER_RESET_KEY);
+            const savedVersion = localStorage.getItem(DATA_VERSION_KEY);
             const now = new Date().getTime();
             
             let dataToUse = initialCounterData;
+            
+            const needsReset = !lastReset || (now - parseInt(lastReset) > ONE_HOUR) || savedVersion !== CURRENT_DATA_VERSION;
 
-            if (lastReset && (now - parseInt(lastReset) > ONE_HOUR)) {
-                // Time's up, reset to initial data
+            if (needsReset) {
+                // Time's up or data version is old, reset to initial data
                 localStorage.setItem(COUNTER_STATE_KEY, JSON.stringify(initialCounterData));
                 localStorage.setItem(LAST_COUNTER_RESET_KEY, now.toString());
+                localStorage.setItem(DATA_VERSION_KEY, CURRENT_DATA_VERSION);
                 dataToUse = initialCounterData;
-                 toast({ title: "System Reset", description: "Counter and check-in data have been reset." });
+                if (savedVersion !== CURRENT_DATA_VERSION && savedVersion !== null) {
+                   toast({ title: "System Update", description: "Counter data has been updated to the latest version." });
+                } else if (!lastReset) {
+                    // First time load
+                }
+                else {
+                   toast({ title: "System Reset", description: "Counter and check-in data have been reset." });
+                }
             } else if (savedState) {
                 // Use saved data
                 dataToUse = JSON.parse(savedState);
-            }
-
-            if (!lastReset) {
-                localStorage.setItem(LAST_COUNTER_RESET_KEY, now.toString());
             }
             
             setCounters(dataToUse);
@@ -152,7 +161,7 @@ export function CounterStatusBoard({ isInteractive = false }: CounterStatusBoard
                                     <Plane className="w-4 h-4 text-muted-foreground" />
                                     {isInteractive ? (
                                         <Select
-                                            value={counter.flight || ''}
+                                            value={counter.flight || 'unassigned'}
                                             onValueChange={(value) => handleFlightChange(counter.id, value)}
                                             disabled={!isOpen}
                                         >
@@ -193,3 +202,5 @@ export function CounterStatusBoard({ isInteractive = false }: CounterStatusBoard
         </Card>
     );
 }
+
+    
