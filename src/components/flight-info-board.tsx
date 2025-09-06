@@ -40,16 +40,6 @@ export function FlightInfoBoard() {
         setFlights(getUniqueFlights());
     }, []);
 
-    const getStatusVariant = (status: FlightInfo['status']) => {
-        switch(status) {
-            case 'ON TIME': return 'default';
-            case 'GATE CHANGE': return 'destructive';
-            case 'BOARDING': return 'secondary';
-            case 'DELAYED': return 'destructive';
-            default: return 'default';
-        }
-    }
-
     const getStatusClass = (status: FlightInfo['status']) => {
         switch(status) {
             case 'ON TIME': return 'bg-green-500/20 text-green-300 border-green-500/50';
