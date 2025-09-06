@@ -11,6 +11,7 @@ To run the project, you need to run two commands in two separate terminals.
 **1. Run the App Server:**
 This runs the user interface and all the screens.
 
+
 ```bash
 npm run dev
 ```
