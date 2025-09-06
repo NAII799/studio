@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState }.
+import { useState } from "react";
 import { SupervisorLogin } from "@/components/supervisor-login";
 import { CounterStatusBoard } from "@/components/counter-status-board";
 import { AirportHeader } from "@/components/airport-header";
