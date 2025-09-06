@@ -19,7 +19,7 @@ const getPassengerList = (): PassengerInfo[] => {
         pnr: pnr,
         name: pax.nameEn,
         destination: pax.destinationEn,
-    }));
+    })).sort((a, b) => a.name.localeCompare(b.name));
 }
 
 export function PassengerManifest() {
