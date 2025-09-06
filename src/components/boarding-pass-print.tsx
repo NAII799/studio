@@ -39,7 +39,7 @@ const BarcodePlaceholder = ({ className }: { className?: string }) => (
 
 const InfoBlock = ({ label, value, valueClassName, largeValue = false }: { label: string, value: string | number, valueClassName?: string, largeValue?: boolean }) => (
     <div className="flex flex-col items-center justify-center text-center">
-        <h4 className="text-[9px] text-gray-600 font-semibold tracking-wider uppercase">{label}</h4>
+        <h4 className="text-[9px] text-gray-600 font-semibold tracking-wider uppercase whitespace-nowrap">{label}</h4>
         <p className={`font-bold ${largeValue ? 'text-xl' : 'text-base'} ${valueClassName}`}>{value}</p>
     </div>
 );
@@ -106,7 +106,7 @@ export function BoardingPassPrint({ passenger }: { passenger: CheckedInPassenger
                 <div className="border-t-2 border-dashed border-gray-300 -mx-3 mt-2"></div>
                 
                 <div className="grid grid-cols-5 gap-1 pt-2 text-center">
-                   <InfoBlock label="Boarding Time" value={boardingTimeString} valueClassName="text-blue-600" largeValue={true} />
+                   <InfoBlock label="Boarding" value={boardingTimeString} valueClassName="text-blue-600" largeValue={true} />
                    <InfoBlock label="Gate" value={passenger.finalGate || passenger.gate} valueClassName="text-blue-600" largeValue={true} />
                    <InfoBlock label="Seat" value={passenger.seat} largeValue={true} />
                    <InfoBlock label="Zone" value="4" largeValue={true} />
@@ -146,5 +146,6 @@ export function BoardingPassPrint({ passenger }: { passenger: CheckedInPassenger
     
 
     
+
 
 
