@@ -10,12 +10,15 @@ import { BaggageTagPrint } from "@/components/baggage-tag-print";
 import type { CheckedInPassenger } from "@/lib/types";
 import { FlightInfoBoard } from "@/components/flight-info-board";
 import { PassengerManifest } from "@/components/passenger-manifest";
+import { CounterStatusBoard } from "@/components/counter-status-board";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 
 export default function Home() {
   const [passenger, setPassenger] = useState<CheckedInPassenger | null>(null);
   const [printView, setPrintView] = useState<'boardingPass' | 'baggageTag' | null>(null);
   const [isManifestOpen, setIsManifestOpen] = useState(false);
+  const [isCounterStatusOpen, setIsCounterStatusOpen] = useState(false);
+
 
   const handleCheckinComplete = (p: CheckedInPassenger) => {
     setPassenger(p);
@@ -54,12 +57,18 @@ export default function Home() {
             />
           </div>
         </main>
-        <AirportFooter />
+        <AirportFooter onShowCounters={() => setIsCounterStatusOpen(true)} />
       </div>
 
       <Sheet open={isManifestOpen} onOpenChange={setIsManifestOpen}>
         <SheetContent className="w-full sm:max-w-2xl p-0">
           <PassengerManifest />
+        </SheetContent>
+      </Sheet>
+      
+      <Sheet open={isCounterStatusOpen} onOpenChange={setIsCounterStatusOpen}>
+        <SheetContent className="w-full sm:max-w-4xl p-0">
+          <CounterStatusBoard />
         </SheetContent>
       </Sheet>
 
