@@ -1,5 +1,5 @@
 
-import type { PassengerData } from "./types";
+import type { Passenger, PassengerData } from "./types";
 
 export const passengerDatabase: PassengerData = {
     'S8K2L1': {
@@ -2834,4 +2834,17 @@ export function findPassenger(bookingRef: string, name: string) {
         return passenger;
     }
     return null;
+}
+
+export function getUniqueFlights() {
+    const flightsMap = new Map<string, Pick<Passenger, 'flight' | 'destinationEn'>>();
+    Object.values(passengerDatabase).forEach(pax => {
+        if (!flightsMap.has(pax.flight)) {
+            flightsMap.set(pax.flight, {
+                flight: pax.flight,
+                destinationEn: pax.destinationEn,
+            });
+        }
+    });
+    return Array.from(flightsMap.values()).sort((a,b) => a.flight.localeCompare(b.flight));
 }
