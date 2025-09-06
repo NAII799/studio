@@ -4,7 +4,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { counterData as initialCounterData, type Counter } from "@/lib/counter-data";
 import { getUniqueFlights } from "@/lib/data";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -12,11 +12,12 @@ import { Switch } from "@/components/ui/switch";
 import { Monitor, Plane, User, Save } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { AiExplainer } from "./common/ai-explainer";
 
 const COUNTER_STATE_KEY = 'counterState';
 const LAST_COUNTER_RESET_KEY = 'lastCounterReset';
 const DATA_VERSION_KEY = 'counterDataVersion';
-const CURRENT_DATA_VERSION = '1.1'; // Increment this when initialCounterData changes
+const CURRENT_DATA_VERSION = '1.2'; // Increment this when initialCounterData changes
 const ONE_HOUR = 60 * 60 * 1000;
 
 interface CounterStatusBoardProps {
@@ -33,28 +34,32 @@ export function CounterStatusBoard({ isInteractive = false }: CounterStatusBoard
         if (typeof window === 'undefined') return;
 
         try {
+            const savedVersion = localStorage.getItem(DATA_VERSION_KEY);
+            let dataToUse = initialCounterData;
+
+            // If the data version in localStorage doesn't match the new version, force a reset.
+            if (savedVersion !== CURRENT_DATA_VERSION) {
+                localStorage.removeItem(COUNTER_STATE_KEY);
+                localStorage.removeItem(LAST_COUNTER_RESET_KEY);
+                localStorage.setItem(DATA_VERSION_KEY, CURRENT_DATA_VERSION);
+                if (savedVersion !== null) {
+                    toast({ title: "System Update", description: "Counter data has been reset to the latest configuration." });
+                }
+            }
+
             const savedState = localStorage.getItem(COUNTER_STATE_KEY);
             const lastReset = localStorage.getItem(LAST_COUNTER_RESET_KEY);
-            const savedVersion = localStorage.getItem(DATA_VERSION_KEY);
             const now = new Date().getTime();
             
-            let dataToUse = initialCounterData;
-            
-            const needsReset = !lastReset || (now - parseInt(lastReset) > ONE_HOUR) || savedVersion !== CURRENT_DATA_VERSION;
+            const needsHourlyReset = !lastReset || (now - parseInt(lastReset) > ONE_HOUR);
 
-            if (needsReset) {
-                // Time's up or data version is old, reset to initial data
+            if (needsHourlyReset) {
+                // Time's up, reset to initial data
                 localStorage.setItem(COUNTER_STATE_KEY, JSON.stringify(initialCounterData));
                 localStorage.setItem(LAST_COUNTER_RESET_KEY, now.toString());
-                localStorage.setItem(DATA_VERSION_KEY, CURRENT_DATA_VERSION);
                 dataToUse = initialCounterData;
-                if (savedVersion !== CURRENT_DATA_VERSION && savedVersion !== null) {
-                   toast({ title: "System Update", description: "Counter data has been updated to the latest version." });
-                } else if (!lastReset) {
-                    // First time load
-                }
-                else {
-                   toast({ title: "System Reset", description: "Counter and check-in data have been reset." });
+                if(lastReset) { // Only show toast if it's a periodic reset, not first load
+                    toast({ title: "System Reset", description: "Counter and check-in data have been reset." });
                 }
             } else if (savedState) {
                 // Use saved data
@@ -199,8 +204,11 @@ export function CounterStatusBoard({ isInteractive = false }: CounterStatusBoard
                     )})}
                 </div>
             </CardContent>
+            {isInteractive && (
+                <CardFooter className="p-4 border-t border-border mt-auto">
+                    <AiExplainer step="counterStatusBoard" className="w-full text-center" />
+                </CardFooter>
+            )}
         </Card>
     );
 }
-
-    
