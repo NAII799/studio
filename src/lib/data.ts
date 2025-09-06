@@ -181,7 +181,8 @@ export const passengerDatabase: PassengerData = {
         terminal: '1',
         class: 'درجة رجال أعمال',
         classEn: 'Business Class',
-        baggageAllowance: { count: 3, weight: 23 }
+        baggageAllowance: { count: 3, weight: 23 },
+        hasGateChange: true
     },
     'H4N5O1': {
         name: 'ABDUL MJEED BASHEER ALANAZI',
@@ -217,7 +218,8 @@ export const passengerDatabase: PassengerData = {
         terminal: '1',
         class: 'اقتصادية',
         classEn: 'Economy',
-        baggageAllowance: { count: 2, weight: 23 }
+        baggageAllowance: { count: 2, weight: 23 },
+        specialAssistance: 'wheelchair'
     },
     'S8R9S3': {
         name: 'ABDULLAH DAKHIL ALRABIEII',
@@ -2584,7 +2586,7 @@ export const passengerDatabase: PassengerData = {
         terminal: '1',
         class: 'درجة رجال أعمال',
         classEn: 'Business Class',
-        baggageAllowance: { count: 3, weight: 23 }
+        baggageAllowance: { count: 3, weight: 32 }
     },
     'T8U9V0': {
         name: 'TURKY IBRAHEEM ALI ALASERI',
