@@ -18,10 +18,10 @@ type FlightInfo = {
 };
 
 const getUniqueFlights = (): FlightInfo[] => {
-    const flights = new Map<string, FlightInfo>();
+    const flightsMap = new Map<string, FlightInfo>();
     Object.values(passengerDatabase).forEach(pax => {
-        if (!flights.has(pax.flight)) {
-            flights.set(pax.flight, {
+        if (!flightsMap.has(pax.flight)) {
+            flightsMap.set(pax.flight, {
                 flight: pax.flight,
                 destinationEn: pax.destinationEn,
                 departure: pax.departure,
@@ -30,7 +30,30 @@ const getUniqueFlights = (): FlightInfo[] => {
             });
         }
     });
-    return Array.from(flights.values()).sort((a,b) => a.departure.localeCompare(b.departure));
+
+    const flights = Array.from(flightsMap.values());
+    
+    // Set 3 random flights to DELAYED
+    let delayedCount = 0;
+    while (delayedCount < 3) {
+        const randomIndex = Math.floor(Math.random() * flights.length);
+        if (flights[randomIndex].status === 'ON TIME') {
+            flights[randomIndex].status = 'DELAYED';
+            delayedCount++;
+        }
+    }
+
+    // Set 2 random flights to BOARDING
+    let boardingCount = 0;
+    while (boardingCount < 2) {
+        const randomIndex = Math.floor(Math.random() * flights.length);
+        if (flights[randomIndex].status === 'ON TIME') {
+            flights[randomIndex].status = 'BOARDING';
+            boardingCount++;
+        }
+    }
+
+    return flights.sort((a,b) => a.departure.localeCompare(b.departure));
 }
 
 export function FlightInfoBoard() {
@@ -44,7 +67,7 @@ export function FlightInfoBoard() {
         switch(status) {
             case 'ON TIME': return 'bg-green-500/20 text-green-300 border-green-500/50';
             case 'GATE CHANGE': return 'bg-yellow-500/20 text-yellow-300 border-yellow-500/50 animate-pulse';
-            case 'BOARDING': return 'bg-blue-500/20 text-blue-300 border-blue-500/50';
+            case 'BOARDING': return 'bg-blue-500/20 text-blue-300 border-blue-500/50 animate-pulse';
             case 'DELAYED': return 'bg-red-500/20 text-red-300 border-red-500/50';
             default: return '';
         }
@@ -77,7 +100,7 @@ export function FlightInfoBoard() {
                                     <TableCell className="text-center px-3 py-2">{flight.departure}</TableCell>
                                     <TableCell className="text-center px-3 py-2">{flight.gate}</TableCell>
                                     <TableCell className="text-right px-3 py-2">
-                                        <Badge variant="outline" className={`text-[10px] ${getStatusClass(flight.status)}`}>
+                                        <Badge variant="outline" className={`text-[10px] w-24 justify-center ${getStatusClass(flight.status)}`}>
                                            {flight.status}
                                         </Badge>
                                     </TableCell>
