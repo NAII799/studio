@@ -19,13 +19,20 @@ const ONE_HOUR = 60 * 60 * 1000;
 export function CounterStatusBoard() {
     const [counters, setCounters] = useState<Counter[]>(() => {
         if (typeof window === 'undefined') return initialCounterData;
-        const savedState = localStorage.getItem(COUNTER_STATE_KEY);
-        return savedState ? JSON.parse(savedState) : initialCounterData;
+        try {
+            const savedState = localStorage.getItem(COUNTER_STATE_KEY);
+            return savedState ? JSON.parse(savedState) : initialCounterData;
+        } catch (error) {
+            console.error("Failed to parse counter state from localStorage", error);
+            return initialCounterData;
+        }
     });
     const [editingAgent, setEditingAgent] = useState<string | null>(null);
     const [agentName, setAgentName] = useState("");
 
     useEffect(() => {
+        if (typeof window === 'undefined') return;
+
         const lastReset = localStorage.getItem(LAST_COUNTER_RESET_KEY);
         const now = new Date().getTime();
 
@@ -39,7 +46,9 @@ export function CounterStatusBoard() {
     }, []);
 
     useEffect(() => {
-        localStorage.setItem(COUNTER_STATE_KEY, JSON.stringify(counters));
+        if (typeof window !== 'undefined') {
+            localStorage.setItem(COUNTER_STATE_KEY, JSON.stringify(counters));
+        }
     }, [counters]);
 
 
@@ -62,13 +71,13 @@ export function CounterStatusBoard() {
 
     const handleFlightChange = (counterId: string, newFlight: string) => {
         setCounters(counters.map(c => 
-            c.id === counterId ? { ...c, flight: newFlight } : c
+            c.id === counterId ? { ...c, flight: newFlight === 'null' ? null : newFlight } : c
         ));
     };
 
     const handleAgentNameChange = (counterId: string) => {
         setCounters(counters.map(c => 
-            c.id === counterId ? { ...c, agent: agentName } : c
+            c.id === counterId ? { ...c, agent: agentName || null } : c
         ));
         setEditingAgent(null);
         setAgentName("");
@@ -90,14 +99,14 @@ export function CounterStatusBoard() {
                 <CardTitle className="text-lg font-bold text-primary">Counters Management</CardTitle>
                 <Monitor className="h-6 w-6 text-muted-foreground" />
             </CardHeader>
-            <CardContent className="flex-grow p-0 overflow-hidden">
+            <CardContent className="flex-grow p-0 overflow-auto">
                 <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {counters.map((counter) => {
                         const isOpen = counter.status === 'OPEN';
                         const isEditingThis = editingAgent === counter.id;
                         return (
                         <Card key={counter.id} className={`bg-secondary/50 transition-all duration-300 ${isOpen ? 'shadow-lg shadow-primary/10' : 'opacity-70'}`}>
-                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 p-4">
                                 <CardTitle className="text-base font-bold font-mono">{counter.id}</CardTitle>
                                 <div className="flex items-center gap-2">
                                      <Label htmlFor={`status-${counter.id}`} className="text-xs text-muted-foreground">
@@ -111,7 +120,7 @@ export function CounterStatusBoard() {
                                     />
                                 </div>
                             </CardHeader>
-                            <CardContent className="space-y-4 pt-2">
+                            <CardContent className="space-y-4 pt-2 p-4">
                                 <div className="space-y-2">
                                     <Label className="flex items-center gap-2 text-sm text-muted-foreground"><Plane className="w-4 h-4" /> Flight</Label>
                                     <Select
@@ -123,7 +132,7 @@ export function CounterStatusBoard() {
                                             <SelectValue placeholder="Assign flight..." />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="null" disabled>Assign flight...</SelectItem>
+                                            <SelectItem value="null">Unassigned</SelectItem>
                                             {uniqueFlights.map(flight => (
                                                 <SelectItem key={flight.flight} value={flight.flight}>
                                                     {flight.flight} - {flight.destinationEn}
@@ -141,6 +150,7 @@ export function CounterStatusBoard() {
                                                 onChange={(e) => setAgentName(e.target.value)}
                                                 className="bg-input border-primary/50"
                                                 autoFocus
+                                                onKeyDown={(e) => e.key === 'Enter' && handleAgentNameChange(counter.id)}
                                             />
                                             <Button size="icon" variant="ghost" className="text-green-400 hover:bg-green-900/50 hover:text-green-300" onClick={() => handleAgentNameChange(counter.id)}><Save className="w-4 h-4"/></Button>
                                             <Button size="icon" variant="ghost" className="text-red-400 hover:bg-red-900/50 hover:text-red-300" onClick={cancelEditing}><X className="w-4 h-4"/></Button>
@@ -151,11 +161,11 @@ export function CounterStatusBoard() {
                                             <Button 
                                                 size="icon" 
                                                 variant="ghost" 
-                                                className="w-6 h-6"
+                                                className="w-6 h-6 text-muted-foreground hover:text-foreground"
                                                 onClick={() => startEditingAgent(counter.id, counter.agent)}
                                                 disabled={!isOpen}
                                             >
-                                                <Edit className="w-4 h-4" />
+                                                <Edit className="w-3 h-3" />
                                             </Button>
                                         </div>
                                     )}
