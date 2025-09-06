@@ -78,7 +78,7 @@ export function CounterStatusBoard({ isInteractive = false }: CounterStatusBoard
     };
 
     const handleFlightChange = (id: string, flight: string) => {
-        setCounters(prev => prev.map(c => c.id === id ? { ...c, flight } : c));
+        setCounters(prev => prev.map(c => c.id === id ? { ...c, flight: flight === 'unassigned' ? null : flight } : c));
     };
 
     const handleAgentChange = (id: string, agent: string) => {
@@ -160,7 +160,7 @@ export function CounterStatusBoard({ isInteractive = false }: CounterStatusBoard
                                                 <SelectValue placeholder="Select flight..." />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="">Unassigned</SelectItem>
+                                                <SelectItem value="unassigned">Unassigned</SelectItem>
                                                 {flights.map(f => (
                                                     <SelectItem key={f.flight} value={f.flight}>{f.flight} - {f.destinationEn}</SelectItem>
                                                 ))}
@@ -193,4 +193,3 @@ export function CounterStatusBoard({ isInteractive = false }: CounterStatusBoard
         </Card>
     );
 }
-
