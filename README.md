@@ -26,6 +26,60 @@ npm run genkit:watch
 
 ---
 
+## How to Upload the Project to GitHub
+
+Uploading your project to GitHub is the best way to save your work, share it, and access it from any computer.
+
+### Step 1: Create a New Repository on GitHub
+
+1.  Go to [**GitHub.com**](https://github.com) and log in.
+2.  Click the **"+"** icon in the top-right corner and select **"New repository"**.
+3.  Give your repository a name (e.g., `altea-dcs-simulator`).
+4.  Choose "Private" if you don't want others to see the code.
+5.  **Do not** initialize with a README, .gitignore, or license.
+6.  Click **"Create repository"**.
+
+### Step 2: Upload Your Code
+
+Now, in your project's **Terminal** window, run the following commands one by one.
+
+1.  **Initialize Git in your project:**
+    ```bash
+    git init
+    ```
+
+2.  **Add all your files to be tracked:**
+    ```bash
+    git add .
+    ```
+
+3.  **Save your first version (commit):**
+    ```bash
+    git commit -m "Initial commit"
+    ```
+
+4.  **Connect your project to the GitHub repository:**
+    *   On your new GitHub repository page, copy the URL. It will look something like this: `https://github.com/your-username/your-repo-name.git`
+    *   Run this command, but replace the URL with your own:
+        ```bash
+        git remote add origin https://github.com/your-username/your-repo-name.git
+        ```
+
+5.  **Change the default branch name to `main`:**
+    ```bash
+    git branch -M main
+    ```
+
+6.  **Push your code to GitHub!**
+    ```bash
+    git push -u origin main
+    ```
+
+Congratulations! Your code is now safely stored on GitHub.
+
+---
+
+
 ## How to Deploy the Project Online (Publish to the Internet)
 
 Follow these steps to publish your project on Firebase Hosting, which offers a generous free plan. This will make your project available online 24/7 from any device.
