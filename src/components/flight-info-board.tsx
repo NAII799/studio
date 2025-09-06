@@ -62,21 +62,21 @@ export function FlightInfoBoard() {
                     <Table>
                         <TableHeader>
                             <TableRow className="text-[10px] uppercase">
-                                <TableHead className="px-3">Flight</TableHead>
-                                <TableHead className="px-3">Destination</TableHead>
-                                <TableHead className="text-center px-3">Time</TableHead>
-                                <TableHead className="text-center px-3">Gate</TableHead>
-                                <TableHead className="text-right px-3">Status</TableHead>
+                                <TableHead className="px-3 py-2">Flight</TableHead>
+                                <TableHead className="px-3 py-2">Destination</TableHead>
+                                <TableHead className="text-center px-3 py-2">Time</TableHead>
+                                <TableHead className="text-center px-3 py-2">Gate</TableHead>
+                                <TableHead className="text-right px-3 py-2">Status</TableHead>
                             </TableRow>
                         </TableHeader>
                          <TableBody className="text-xs">
                             {flights.map((flight) => (
                                 <TableRow key={flight.flight} className="font-mono">
-                                    <TableCell className="font-bold px-3">{flight.flight}</TableCell>
-                                    <TableCell className="px-3">{flight.destinationEn.toUpperCase()}</TableCell>
-                                    <TableCell className="text-center px-3">{flight.departure}</TableCell>
-                                    <TableCell className="text-center px-3">{flight.gate}</TableCell>
-                                    <TableCell className="text-right px-3">
+                                    <TableCell className="font-bold px-3 py-2">{flight.flight}</TableCell>
+                                    <TableCell className="px-3 py-2">{flight.destinationEn.toUpperCase()}</TableCell>
+                                    <TableCell className="text-center px-3 py-2">{flight.departure}</TableCell>
+                                    <TableCell className="text-center px-3 py-2">{flight.gate}</TableCell>
+                                    <TableCell className="text-right px-3 py-2">
                                         <Badge variant="outline" className={`text-[10px] ${getStatusClass(flight.status)}`}>
                                            {flight.status}
                                         </Badge>
