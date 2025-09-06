@@ -9,6 +9,7 @@ import { BoardingPassPrint } from "@/components/boarding-pass-print";
 import { BaggageTagPrint } from "@/components/baggage-tag-print";
 import type { CheckedInPassenger } from "@/lib/types";
 import { FlightInfoBoard } from "@/components/flight-info-board";
+import { PassengerManifest } from "@/components/passenger-manifest";
 
 export default function Home() {
   const [passenger, setPassenger] = useState<CheckedInPassenger | null>(null);
@@ -48,6 +49,9 @@ export default function Home() {
               onNewCheckin={handleNewCheckin}
               checkedInPassenger={passenger}
             />
+          </div>
+           <div className="md:w-1/3 lg:w-1/4 flex flex-col">
+            <PassengerManifest />
           </div>
         </main>
         <AirportFooter />
