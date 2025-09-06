@@ -26,7 +26,7 @@ export function PassengerManifest() {
     const passengers = useMemo(() => getPassengerList(), []);
 
     return (
-        <Card className="h-full flex flex-col bg-card/50 border-border/50">
+        <Card className="h-full flex flex-col bg-card/50 border-border/50 overflow-hidden">
             <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-lg font-bold text-primary">Passenger Manifest</CardTitle>
                 <Users className="h-6 w-6 text-muted-foreground" />
