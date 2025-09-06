@@ -39,7 +39,7 @@ export default function Home() {
       <div className={`flex flex-col min-h-screen bg-background ${showPrintable ? 'no-print' : ''}`}>
         <AirportHeader />
         <main className="flex-1 flex flex-col md:flex-row items-stretch justify-center p-4 md:p-10 gap-10">
-          <div className="md:w-1/3 lg:w-1/4 flex flex-col">
+          <div className="md:w-1/3 flex flex-col">
             <FlightInfoBoard />
           </div>
           <div className="flex-1 flex items-center justify-center">
@@ -50,7 +50,7 @@ export default function Home() {
               checkedInPassenger={passenger}
             />
           </div>
-           <div className="md:w-1/3 lg:w-1/4 flex flex-col">
+           <div className="md:w-1/3 flex flex-col">
             <PassengerManifest />
           </div>
         </main>
