@@ -7,7 +7,7 @@ import { PlaneTakeoff } from 'lucide-react';
 export function AirportHeader() {
   return (
     <header className="bg-card border-b border-border no-print">
-        <div className="container mx-auto px-6 py-3 flex justify-between items-center">
+        <div className="mx-auto px-6 py-3 flex justify-between items-center">
             <div className="flex items-center gap-4">
                 <PlaneTakeoff className="h-8 w-8 text-primary" />
                 <div>
