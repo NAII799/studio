@@ -17,6 +17,7 @@ export default function Home() {
   const [passenger, setPassenger] = useState<CheckedInPassenger | null>(null);
   const [printView, setPrintView] = useState<'boardingPass' | 'baggageTag' | null>(null);
   const [isManifestOpen, setIsManifestOpen] = useState(false);
+  const [isCountersVisible, setIsCountersVisible] = useState(true);
 
 
   const handleCheckinComplete = (p: CheckedInPassenger) => {
@@ -34,6 +35,7 @@ export default function Home() {
   const handleNewCheckin = () => {
     setPassenger(null);
     setPrintView(null);
+    setIsCountersVisible(true);
   };
 
   const showPrintable = printView && passenger;
@@ -53,10 +55,11 @@ export default function Home() {
               onNewCheckin={handleNewCheckin}
               checkedInPassenger={passenger}
               onShowManifest={() => setIsManifestOpen(true)}
+              onSearchStart={() => setIsCountersVisible(false)}
             />
           </div>
            <div className="md:col-span-1 flex-shrink-0 flex flex-col h-full overflow-auto">
-             <CounterStatusBoard isInteractive={false} />
+            {isCountersVisible && <CounterStatusBoard isInteractive={false} />}
           </div>
         </main>
         <AirportFooter />

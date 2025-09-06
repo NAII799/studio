@@ -20,9 +20,10 @@ interface CheckInFlowProps {
     onNewCheckin: () => void;
     checkedInPassenger: CheckedInPassenger | null;
     onShowManifest: () => void;
+    onSearchStart?: () => void;
 }
 
-export function CheckInFlow({ onCheckinComplete, onPrintRequest, onNewCheckin, checkedInPassenger, onShowManifest }: CheckInFlowProps) {
+export function CheckInFlow({ onCheckinComplete, onPrintRequest, onNewCheckin, checkedInPassenger, onShowManifest, onSearchStart }: CheckInFlowProps) {
   const [screen, setScreen] = useState<Screen>('checkinForm');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -33,6 +34,7 @@ export function CheckInFlow({ onCheckinComplete, onPrintRequest, onNewCheckin, c
   const [aircraftWeightInfo, setAircraftWeightInfo] = useState<AircraftWeightInfo | null>(null);
 
   const handleSearch = async (data: { passengerName: string; bookingRef: string; }) => {
+    onSearchStart?.();
     setIsLoading(true);
     await new Promise(res => setTimeout(res, 500));
     
