@@ -16,12 +16,19 @@ const COUNTER_STATE_KEY = 'counterState';
 const LAST_COUNTER_RESET_KEY = 'lastCounterReset';
 const ONE_HOUR = 60 * 60 * 1000;
 
-export function CounterStatusBoard() {
+interface CounterStatusBoardProps {
+    isInteractive?: boolean;
+}
+
+export function CounterStatusBoard({ isInteractive = false }: CounterStatusBoardProps) {
     const [counters, setCounters] = useState<Counter[]>(() => {
         if (typeof window === 'undefined') return initialCounterData;
         try {
-            const savedState = localStorage.getItem(COUNTER_STATE_KEY);
-            return savedState ? JSON.parse(savedState) : initialCounterData;
+            if (isInteractive) {
+                const savedState = localStorage.getItem(COUNTER_STATE_KEY);
+                return savedState ? JSON.parse(savedState) : initialCounterData;
+            }
+            return initialCounterData;
         } catch (error) {
             console.error("Failed to parse counter state from localStorage", error);
             return initialCounterData;
@@ -31,7 +38,7 @@ export function CounterStatusBoard() {
     const [agentName, setAgentName] = useState("");
 
     useEffect(() => {
-        if (typeof window === 'undefined') return;
+        if (typeof window === 'undefined' || !isInteractive) return;
 
         const lastReset = localStorage.getItem(LAST_COUNTER_RESET_KEY);
         const now = new Date().getTime();
@@ -43,13 +50,13 @@ export function CounterStatusBoard() {
         } else if (!lastReset) {
             localStorage.setItem(LAST_COUNTER_RESET_KEY, now.toString());
         }
-    }, []);
+    }, [isInteractive]);
 
     useEffect(() => {
-        if (typeof window !== 'undefined') {
+        if (typeof window !== 'undefined' && isInteractive) {
             localStorage.setItem(COUNTER_STATE_KEY, JSON.stringify(counters));
         }
-    }, [counters]);
+    }, [counters, isInteractive]);
 
 
     const uniqueFlights = useMemo(() => getUniqueFlights(), []);
@@ -96,7 +103,7 @@ export function CounterStatusBoard() {
     return (
         <Card className="h-full flex flex-col bg-card border-border rounded-lg overflow-hidden">
             <CardHeader className="flex-row items-center justify-between space-y-0 pb-4 p-6 border-b">
-                <CardTitle className="text-lg font-bold text-primary">Counters Management</CardTitle>
+                <CardTitle className="text-lg font-bold text-primary">{isInteractive ? 'Counters Management' : 'Counters Status'}</CardTitle>
                 <Monitor className="h-6 w-6 text-muted-foreground" />
             </CardHeader>
             <CardContent className="flex-grow p-0 overflow-auto">
@@ -112,38 +119,42 @@ export function CounterStatusBoard() {
                                      <Label htmlFor={`status-${counter.id}`} className="text-xs text-muted-foreground">
                                         {counter.status}
                                     </Label>
-                                    <Switch
-                                        id={`status-${counter.id}`}
-                                        checked={isOpen}
-                                        onCheckedChange={(checked) => handleStatusChange(counter.id, checked)}
-                                        className="data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-red-600"
-                                    />
+                                    {isInteractive && (
+                                        <Switch
+                                            id={`status-${counter.id}`}
+                                            checked={isOpen}
+                                            onCheckedChange={(checked) => handleStatusChange(counter.id, checked)}
+                                            className="data-[state=checked]:bg-green-600 data-[state=unchecked]:bg-red-600"
+                                        />
+                                    )}
                                 </div>
                             </CardHeader>
                             <CardContent className="space-y-4 pt-2 p-4">
                                 <div className="space-y-2">
                                     <Label className="flex items-center gap-2 text-sm text-muted-foreground"><Plane className="w-4 h-4" /> Flight</Label>
-                                    <Select
-                                        value={counter.flight || ""}
+                                     <Select
+                                        value={counter.flight || "null"}
                                         onValueChange={(value) => handleFlightChange(counter.id, value)}
-                                        disabled={!isOpen}
+                                        disabled={!isOpen || !isInteractive}
                                     >
                                         <SelectTrigger className="bg-input border-border/50">
                                             <SelectValue placeholder="Assign flight..." />
                                         </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="null">Unassigned</SelectItem>
-                                            {uniqueFlights.map(flight => (
-                                                <SelectItem key={flight.flight} value={flight.flight}>
-                                                    {flight.flight} - {flight.destinationEn}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
+                                        {isInteractive && (
+                                            <SelectContent>
+                                                <SelectItem value="null">Unassigned</SelectItem>
+                                                {uniqueFlights.map(flight => (
+                                                    <SelectItem key={flight.flight} value={flight.flight}>
+                                                        {flight.flight} - {flight.destinationEn}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        )}
                                     </Select>
                                 </div>
                                 <div className="space-y-2">
                                     <Label className="flex items-center gap-2 text-sm text-muted-foreground"><User className="w-4 h-4" /> Agent</Label>
-                                    {isEditingThis ? (
+                                    {isInteractive && isEditingThis ? (
                                         <div className="flex items-center gap-2">
                                             <Input 
                                                 value={agentName}
@@ -158,15 +169,17 @@ export function CounterStatusBoard() {
                                     ) : (
                                         <div className="flex items-center justify-between gap-2 p-2 rounded-md bg-input/50 h-10">
                                             <p className="text-sm font-medium truncate">{counter.agent || "Unassigned"}</p>
-                                            <Button 
-                                                size="icon" 
-                                                variant="ghost" 
-                                                className="w-6 h-6 text-muted-foreground hover:text-foreground"
-                                                onClick={() => startEditingAgent(counter.id, counter.agent)}
-                                                disabled={!isOpen}
-                                            >
-                                                <Edit className="w-3 h-3" />
-                                            </Button>
+                                            {isInteractive && (
+                                                <Button 
+                                                    size="icon" 
+                                                    variant="ghost" 
+                                                    className="w-6 h-6 text-muted-foreground hover:text-foreground"
+                                                    onClick={() => startEditingAgent(counter.id, counter.agent)}
+                                                    disabled={!isOpen}
+                                                >
+                                                    <Edit className="w-3 h-3" />
+                                                </Button>
+                                            )}
                                         </div>
                                     )}
                                 </div>

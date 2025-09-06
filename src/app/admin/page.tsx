@@ -27,7 +27,7 @@ export default function AdminPage() {
       <AirportHeader />
       <main className="flex-1 flex flex-col items-center justify-center p-4 md:p-10 gap-10">
         <div className="w-full max-w-6xl h-full">
-            <CounterStatusBoard />
+            <CounterStatusBoard isInteractive={true} />
         </div>
         <Button onClick={() => router.push('/')} variant="outline">Back to Check-in</Button>
       </main>
