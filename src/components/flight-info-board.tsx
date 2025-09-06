@@ -2,12 +2,13 @@
 "use client";
 
 import { passengerDatabase } from "@/lib/data";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Plane, Clock, Landmark } from 'lucide-react';
+import { Plane } from 'lucide-react';
 import { useState, useEffect } from "react";
+import { AiExplainer } from "./common/ai-explainer";
 
 type FlightInfo = {
     flight: string;
@@ -35,7 +36,7 @@ const getUniqueFlights = (): FlightInfo[] => {
     
     // Set 3 random flights to DELAYED
     let delayedCount = 0;
-    while (delayedCount < 3) {
+    while (delayedCount < 3 && flights.length > 3) {
         const randomIndex = Math.floor(Math.random() * flights.length);
         if (flights[randomIndex].status === 'ON TIME') {
             flights[randomIndex].status = 'DELAYED';
@@ -45,7 +46,7 @@ const getUniqueFlights = (): FlightInfo[] => {
 
     // Set 2 random flights to BOARDING
     let boardingCount = 0;
-    while (boardingCount < 2) {
+    while (boardingCount < 2 && flights.length > 5) {
         const randomIndex = Math.floor(Math.random() * flights.length);
         if (flights[randomIndex].status === 'ON TIME') {
             flights[randomIndex].status = 'BOARDING';
@@ -60,6 +61,8 @@ export function FlightInfoBoard() {
     const [flights, setFlights] = useState<FlightInfo[]>([]);
 
     useEffect(() => {
+        // This check ensures we only generate the random statuses on the client
+        // to avoid server-client mismatch issues.
         setFlights(getUniqueFlights());
     }, []);
 
@@ -110,6 +113,9 @@ export function FlightInfoBoard() {
                     </Table>
                 </ScrollArea>
             </CardContent>
+            <CardFooter className="p-4 border-t border-border mt-auto">
+                <AiExplainer step="flightInfoBoard" className="w-full text-center" />
+            </CardFooter>
         </Card>
     );
 }

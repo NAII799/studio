@@ -12,7 +12,7 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const ExplainStepInputSchema = z.object({
-  step: z.enum(['checkinForm', 'flightDetails', 'boardingPass', 'securityQuestions']).describe("The specific step of the check-in process to explain."),
+  step: z.enum(['checkinForm', 'flightDetails', 'boardingPass', 'securityQuestions', 'flightInfoBoard']).describe("The specific step of the check-in process to explain."),
 });
 export type ExplainStepInput = z.infer<typeof ExplainStepInputSchema>;
 
@@ -52,6 +52,7 @@ Step-specific guidance:
 - **flightDetails:** This is the core of the process. Emphasize seat assignment and baggage registration as key tasks.
 - **boardingPass:** This is the final output. Explain its importance as a document for the passenger to board the plane, AND also explain the importance of the baggage tag and how it ensures the luggage gets to the correct destination.
 - **securityQuestions:** Explain that these are standard, mandatory questions to ensure flight safety. Focus on the agent's responsibility to ask them clearly and get confirmation from the passenger.
+- **flightInfoBoard:** This screen is a "Flight Information Display System" (FIDS). Explain that it shows all departing flights, their destinations, departure times, gate numbers, and status (e.g., On Time, Delayed, Boarding). Emphasize that check-in agents use this to quickly find flight details and direct passengers, especially when there are last-minute changes like a gate change.
 `,
 });
 

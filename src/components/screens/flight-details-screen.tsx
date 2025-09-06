@@ -8,7 +8,7 @@ import { SeatMap } from "@/components/seat-map";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertTriangle, Armchair, Plane, ChevronRight, Check } from "lucide-react";
+import { AlertTriangle, Armchair, Plane, ChevronRight, Check, Luggage } from "lucide-react";
 import { AiExplainer } from "../common/ai-explainer";
 
 const Wheelchair = (props: React.SVGProps<SVGSVGElement>) => (
@@ -55,12 +55,12 @@ export function FlightDetailsScreen({
 
 
   return (
-    <div className="w-full max-w-6xl animate-in fade-in-0 duration-500 text-foreground">
+    <div className="w-full max-w-7xl animate-in fade-in-0 duration-500 text-foreground">
         <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-primary">Flight Details & Seat Selection</h2>
             <p className="text-muted-foreground">Verify details, select a seat, and add baggage.</p>
         </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         {/* Left Column: Info & Baggage */}
         <div className="space-y-6">
           <ScreenWrapper className="w-full max-w-full p-0">
@@ -96,14 +96,19 @@ export function FlightDetailsScreen({
             )}
           </ScreenWrapper>
           <ScreenWrapper className="w-full max-w-full">
-            <div className="baggage-section text-center">
-              <h3 className="text-lg font-bold text-primary mb-4">Baggage Registration</h3>
-              <div className="bg-secondary/50 p-3 rounded-md border border-border mb-4 max-w-md mx-auto text-sm">
+             <CardHeader className="p-0 mb-4 text-center">
+                <CardTitle className="text-lg flex items-center justify-center gap-2">
+                    <Luggage />
+                    Baggage Registration
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="bg-secondary/50 p-3 rounded-md border border-border mb-4 max-w-md mx-auto text-sm text-center">
                  <p>Allowance: <span className="font-bold">{passenger.baggageAllowance.count}</span> piece(s)</p>
                  <p>Weight per piece: <span className="font-bold">{passenger.baggageAllowance.weight}</span> kg</p>
               </div>
-              <div className="space-y-2 max-w-xs mx-auto">
-                 <Label htmlFor="baggageCount" className="font-semibold">Number of Bags</Label>
+              <div className="space-y-2 max-w-xs mx-auto text-center">
+                 <Label htmlFor="baggageCount" className="font-semibold">Number of Bags to Check-in</Label>
                  <Input 
                    type="number" 
                    id="baggageCount" 
@@ -123,7 +128,7 @@ export function FlightDetailsScreen({
                    </AlertDescription>
                  </Alert>
               )}
-            </div>
+            </CardContent>
           </ScreenWrapper>
         </div>
 
