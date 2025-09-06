@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Users } from 'lucide-react';
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 
 type PassengerInfo = {
     pnr: string;
