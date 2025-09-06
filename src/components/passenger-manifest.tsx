@@ -26,27 +26,27 @@ export function PassengerManifest() {
     const passengers = useMemo(() => getPassengerList(), []);
 
     return (
-        <Card className="h-full flex flex-col bg-card/50 border-border/50 overflow-hidden">
-            <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+        <Card className="h-full flex flex-col bg-card border-0 rounded-none overflow-hidden">
+            <CardHeader className="flex-row items-center justify-between space-y-0 pb-2 p-6">
                 <CardTitle className="text-lg font-bold text-primary">Passenger Manifest</CardTitle>
                 <Users className="h-6 w-6 text-muted-foreground" />
             </CardHeader>
             <CardContent className="flex-grow p-0 overflow-hidden">
                 <ScrollArea className="h-full">
-                    <Table>
+                     <Table>
                         <TableHeader>
                             <TableRow className="text-[10px] uppercase">
-                                <TableHead className="px-3 py-2">Passenger Name</TableHead>
-                                <TableHead className="px-3 py-2">PNR</TableHead>
-                                <TableHead className="text-right px-3 py-2">Destination</TableHead>
+                                <TableHead className="px-6 py-2">Passenger Name</TableHead>
+                                <TableHead className="px-6 py-2">PNR</TableHead>
+                                <TableHead className="text-right px-6 py-2">Destination</TableHead>
                             </TableRow>
                         </TableHeader>
                          <TableBody className="text-xs">
                             {passengers.map((pax) => (
                                 <TableRow key={pax.pnr} className="font-mono">
-                                    <TableCell className="font-sans font-medium px-3 py-2 truncate" title={pax.name}>{pax.name}</TableCell>
-                                    <TableCell className="font-bold px-3 py-2">{pax.pnr}</TableCell>
-                                    <TableCell className="text-right px-3 py-2">{pax.destination.toUpperCase()}</TableCell>
+                                    <TableCell className="font-sans font-medium px-6 py-2 truncate" title={pax.name}>{pax.name}</TableCell>
+                                    <TableCell className="font-bold px-6 py-2">{pax.pnr}</TableCell>
+                                    <TableCell className="text-right px-6 py-2">{pax.destination.toUpperCase()}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
