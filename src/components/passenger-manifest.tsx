@@ -50,11 +50,8 @@ export function PassengerManifest() {
 
     const handlePrintSelected = () => {
         if (selectedPnrs.length === 0) return;
-        // The actual printing logic will be handled on a dedicated page
-        // For now, we'll just log the selected PNRs
-        console.log("Selected for printing:", selectedPnrs);
-        // Next step would be to navigate to a print-preview page:
-        // router.push(`/print-preview?pnrs=${selectedPnrs.join(',')}`);
+        const printUrl = `/print-manifest?pnrs=${selectedPnrs.join(',')}`;
+        window.open(printUrl, '_blank');
     };
     
     const isAllSelected = selectedPnrs.length > 0 && selectedPnrs.length === passengers.length;
