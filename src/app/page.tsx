@@ -56,7 +56,7 @@ export default function Home() {
             />
           </div>
            <div className="md:col-span-1 flex-shrink-0 flex flex-col h-full overflow-auto">
-             <CounterStatusBoard />
+             <CounterStatusBoard isInteractive={false} />
           </div>
         </main>
         <AirportFooter />
