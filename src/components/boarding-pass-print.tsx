@@ -40,7 +40,7 @@ const BarcodePlaceholder = ({ className }: { className?: string }) => (
 const InfoBlock = ({ label, value, valueClassName, largeValue = false }: { label: string, value: string | number, valueClassName?: string, largeValue?: boolean }) => (
     <div className="flex flex-col items-center justify-center text-center">
         <h4 className="text-[9px] text-gray-600 font-semibold tracking-wider uppercase">{label}</h4>
-        <p className={`font-bold ${largeValue ? 'text-2xl' : 'text-base'} ${valueClassName}`}>{value}</p>
+        <p className={`font-bold ${largeValue ? 'text-4xl' : 'text-base'} ${valueClassName}`}>{value}</p>
     </div>
 );
 
@@ -142,5 +142,7 @@ export function BoardingPassPrint({ passenger }: { passenger: CheckedInPassenger
     </div>
   );
 }
+
+    
 
     
