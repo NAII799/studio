@@ -26,7 +26,7 @@ export default function AdminPage() {
     <div className="flex flex-col min-h-screen bg-background">
       <AirportHeader />
       <main className="flex-1 flex flex-col items-center justify-center p-4 md:p-10 gap-10">
-        <div className="w-full max-w-6xl">
+        <div className="w-full max-w-6xl h-full">
             <CounterStatusBoard />
         </div>
         <Button onClick={() => router.push('/')} variant="outline">Back to Check-in</Button>

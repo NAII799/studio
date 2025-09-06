@@ -11,6 +11,7 @@ import type { CheckedInPassenger } from "@/lib/types";
 import { FlightInfoBoard } from "@/components/flight-info-board";
 import { PassengerManifest } from "@/components/passenger-manifest";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { CounterStatusBoard } from "@/components/counter-status-board";
 
 export default function Home() {
   const [passenger, setPassenger] = useState<CheckedInPassenger | null>(null);
@@ -41,11 +42,11 @@ export default function Home() {
     <>
       <div className={`flex flex-col min-h-screen bg-background ${showPrintable ? 'no-print' : ''}`}>
         <AirportHeader />
-        <main className="flex-1 flex flex-col md:flex-row items-stretch justify-center p-4 md:p-10 gap-10 overflow-hidden">
-          <div className="md:w-1/3 flex-shrink-0 flex flex-col h-full overflow-hidden">
+        <main className="flex-1 grid grid-cols-1 md:grid-cols-3 items-stretch justify-center p-4 md:p-10 gap-10 overflow-hidden">
+          <div className="md:col-span-1 flex-shrink-0 flex flex-col h-full overflow-hidden">
             <FlightInfoBoard />
           </div>
-          <div className="flex-1 flex items-center justify-center">
+          <div className="md:col-span-1 flex-1 flex items-center justify-center">
              <CheckInFlow 
               onCheckinComplete={handleCheckinComplete}
               onPrintRequest={handlePrintRequest}
@@ -53,6 +54,9 @@ export default function Home() {
               checkedInPassenger={passenger}
               onShowManifest={() => setIsManifestOpen(true)}
             />
+          </div>
+           <div className="md:col-span-1 flex-shrink-0 flex flex-col h-full overflow-auto">
+             <CounterStatusBoard />
           </div>
         </main>
         <AirportFooter />
