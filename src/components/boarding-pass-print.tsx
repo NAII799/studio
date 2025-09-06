@@ -99,7 +99,7 @@ export function BoardingPassPrint({ passenger }: { passenger: CheckedInPassenger
                         <InfoBlock label="Flight" value={passenger.flight} />
                         <InfoBlock label="Date" value={formattedDate} />
                         <InfoBlock label="Seat" value={passenger.seat} />
-                        <InfoBlock label="Class" value={passenger.class.charAt(0)} />
+                        <InfoBlock label="Class" value={passenger.classEn.charAt(0)} />
                     </div>
                 </div>
 
@@ -146,4 +146,5 @@ export function BoardingPassPrint({ passenger }: { passenger: CheckedInPassenger
     
 
     
+
 
