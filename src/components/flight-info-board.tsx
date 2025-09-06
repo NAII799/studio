@@ -1,0 +1,102 @@
+
+"use client";
+
+import { passengerDatabase } from "@/lib/data";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Plane, Clock, Landmark } from 'lucide-react';
+import { useState, useEffect } from "react";
+
+type FlightInfo = {
+    flight: string;
+    destinationEn: string;
+    departure: string;
+    gate: string;
+    status: 'ON TIME' | 'GATE CHANGE' | 'BOARDING' | 'DELAYED';
+};
+
+const getUniqueFlights = (): FlightInfo[] => {
+    const flights = new Map<string, FlightInfo>();
+    Object.values(passengerDatabase).forEach(pax => {
+        if (!flights.has(pax.flight)) {
+            flights.set(pax.flight, {
+                flight: pax.flight,
+                destinationEn: pax.destinationEn,
+                departure: pax.departure,
+                gate: pax.gate,
+                status: pax.hasGateChange ? 'GATE CHANGE' : 'ON TIME'
+            });
+        }
+    });
+    return Array.from(flights.values()).sort((a,b) => a.departure.localeCompare(b.departure));
+}
+
+export function FlightInfoBoard() {
+    const [flights, setFlights] = useState<FlightInfo[]>([]);
+
+    useEffect(() => {
+        setFlights(getUniqueFlights());
+    }, []);
+
+    const getStatusVariant = (status: FlightInfo['status']) => {
+        switch(status) {
+            case 'ON TIME': return 'default';
+            case 'GATE CHANGE': return 'destructive';
+            case 'BOARDING': return 'secondary';
+            case 'DELAYED': return 'destructive';
+            default: return 'default';
+        }
+    }
+
+    const getStatusClass = (status: FlightInfo['status']) => {
+        switch(status) {
+            case 'ON TIME': return 'bg-green-500/20 text-green-300 border-green-500/50';
+            case 'GATE CHANGE': return 'bg-yellow-500/20 text-yellow-300 border-yellow-500/50 animate-pulse';
+            case 'BOARDING': return 'bg-blue-500/20 text-blue-300 border-blue-500/50';
+            case 'DELAYED': return 'bg-red-500/20 text-red-300 border-red-500/50';
+            default: return '';
+        }
+    }
+
+
+    return (
+        <Card className="h-full flex flex-col bg-card/50 border-border/50">
+            <CardHeader className="flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-lg font-bold text-primary">Departures</CardTitle>
+                <Plane className="h-6 w-6 text-muted-foreground" />
+            </CardHeader>
+            <CardContent className="flex-grow p-0 overflow-hidden">
+                <ScrollArea className="h-full">
+                    <Table>
+                        <TableHeader>
+                            <TableRow className="text-xs uppercase">
+                                <TableHead>Flight</TableHead>
+                                <TableHead>Destination</TableHead>
+                                <TableHead className="text-center">Time</TableHead>
+                                <TableHead className="text-center">Gate</TableHead>
+                                <TableHead className="text-right">Status</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                         <TableBody>
+                            {flights.map((flight) => (
+                                <TableRow key={flight.flight} className="font-mono">
+                                    <TableCell className="font-bold">{flight.flight}</TableCell>
+                                    <TableCell>{flight.destinationEn.toUpperCase()}</TableCell>
+                                    <TableCell className="text-center">{flight.departure}</TableCell>
+                                    <TableCell className="text-center">{flight.gate}</TableCell>
+                                    <TableCell className="text-right">
+                                        <Badge variant="outline" className={getStatusClass(flight.status)}>
+                                           {flight.status}
+                                        </Badge>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </ScrollArea>
+            </CardContent>
+        </Card>
+    );
+}

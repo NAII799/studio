@@ -8,6 +8,7 @@ import { CheckInFlow } from "@/components/check-in-flow";
 import { BoardingPassPrint } from "@/components/boarding-pass-print";
 import { BaggageTagPrint } from "@/components/baggage-tag-print";
 import type { CheckedInPassenger } from "@/lib/types";
+import { FlightInfoBoard } from "@/components/flight-info-board";
 
 export default function Home() {
   const [passenger, setPassenger] = useState<CheckedInPassenger | null>(null);
@@ -36,13 +37,18 @@ export default function Home() {
     <>
       <div className={`flex flex-col min-h-screen bg-background ${showPrintable ? 'no-print' : ''}`}>
         <AirportHeader />
-        <main className="flex-1 flex flex-col items-center justify-center p-4 md:p-10">
-          <CheckInFlow 
-            onCheckinComplete={handleCheckinComplete}
-            onPrintRequest={handlePrintRequest}
-            onNewCheckin={handleNewCheckin}
-            checkedInPassenger={passenger}
-          />
+        <main className="flex-1 flex flex-col md:flex-row items-stretch justify-center p-4 md:p-10 gap-10">
+          <div className="md:w-1/3 lg:w-1/4">
+            <FlightInfoBoard />
+          </div>
+          <div className="flex-1 flex items-center justify-center">
+             <CheckInFlow 
+              onCheckinComplete={handleCheckinComplete}
+              onPrintRequest={handlePrintRequest}
+              onNewCheckin={handleNewCheckin}
+              checkedInPassenger={passenger}
+            />
+          </div>
         </main>
         <AirportFooter />
       </div>
