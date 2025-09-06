@@ -1,29 +1,54 @@
 
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { counterData as initialCounterData, type Counter } from "@/lib/counter-data";
 import { getUniqueFlights } from "@/lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Monitor, Plane, User, Edit, Save, X, CheckCircle, XCircle } from 'lucide-react';
+import { Monitor, Plane, User, Edit, Save, X } from 'lucide-react';
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Badge } from "./ui/badge";
+
+const COUNTER_STATE_KEY = 'counterState';
+const LAST_COUNTER_RESET_KEY = 'lastCounterReset';
+const ONE_HOUR = 60 * 60 * 1000;
 
 export function CounterStatusBoard() {
-    const [counters, setCounters] = useState<Counter[]>(initialCounterData);
+    const [counters, setCounters] = useState<Counter[]>(() => {
+        if (typeof window === 'undefined') return initialCounterData;
+        const savedState = localStorage.getItem(COUNTER_STATE_KEY);
+        return savedState ? JSON.parse(savedState) : initialCounterData;
+    });
     const [editingAgent, setEditingAgent] = useState<string | null>(null);
     const [agentName, setAgentName] = useState("");
+
+    useEffect(() => {
+        const lastReset = localStorage.getItem(LAST_COUNTER_RESET_KEY);
+        const now = new Date().getTime();
+
+        if (lastReset && (now - parseInt(lastReset) > ONE_HOUR)) {
+            localStorage.setItem(COUNTER_STATE_KEY, JSON.stringify(initialCounterData));
+            setCounters(initialCounterData);
+            localStorage.setItem(LAST_COUNTER_RESET_KEY, now.toString());
+        } else if (!lastReset) {
+            localStorage.setItem(LAST_COUNTER_RESET_KEY, now.toString());
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem(COUNTER_STATE_KEY, JSON.stringify(counters));
+    }, [counters]);
+
 
     const uniqueFlights = useMemo(() => getUniqueFlights(), []);
 
     const handleStatusChange = (counterId: string, newStatus: boolean) => {
         setCounters(counters.map(c => {
             if (c.id === counterId) {
-                const updatedCounter = { ...c, status: newStatus ? 'OPEN' : 'CLOSED' };
+                const updatedCounter: Counter = { ...c, status: newStatus ? 'OPEN' : 'CLOSED' };
                 // If closing the counter, clear flight and agent info
                 if (!newStatus) {
                     updatedCounter.flight = null;
@@ -57,14 +82,6 @@ export function CounterStatusBoard() {
     const cancelEditing = () => {
         setEditingAgent(null);
         setAgentName("");
-    }
-
-    const getStatusClass = (status: Counter['status']) => {
-        switch(status) {
-            case 'OPEN': return 'bg-green-500/20 text-green-300 border-green-500/50';
-            case 'CLOSED': return 'bg-red-500/20 text-red-300 border-red-500/50';
-            default: return '';
-        }
     }
 
     return (
