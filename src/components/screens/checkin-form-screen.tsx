@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, Search } from "lucide-react";
+import { Loader2, Search, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,9 +20,10 @@ const formSchema = z.object({
 interface CheckinFormScreenProps {
   onSearch: (data: z.infer<typeof formSchema>) => Promise<Passenger | null>;
   isLoading: boolean;
+  onShowManifest: () => void;
 }
 
-export function CheckinFormScreen({ onSearch, isLoading }: CheckinFormScreenProps) {
+export function CheckinFormScreen({ onSearch, isLoading, onShowManifest }: CheckinFormScreenProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -78,7 +79,7 @@ export function CheckinFormScreen({ onSearch, isLoading }: CheckinFormScreenProp
               </FormItem>
             )}
           />
-          <div className="pt-4">
+          <div className="pt-4 flex flex-col gap-3">
             <Button 
               type="submit" 
               size="full"
@@ -93,6 +94,10 @@ export function CheckinFormScreen({ onSearch, isLoading }: CheckinFormScreenProp
                   Search Booking
                 </>
               )}
+            </Button>
+            <Button variant="outline" size="full" onClick={onShowManifest} className="font-bold bg-secondary/50">
+                <Users className="mr-2 h-4 w-4" />
+                Passenger Manifest
             </Button>
           </div>
         </form>

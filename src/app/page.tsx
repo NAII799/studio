@@ -50,10 +50,11 @@ export default function Home() {
               onPrintRequest={handlePrintRequest}
               onNewCheckin={handleNewCheckin}
               checkedInPassenger={passenger}
+              onShowManifest={() => setIsManifestOpen(true)}
             />
           </div>
         </main>
-        <AirportFooter onShowManifest={() => setIsManifestOpen(true)} />
+        <AirportFooter />
       </div>
 
       <Sheet open={isManifestOpen} onOpenChange={setIsManifestOpen}>

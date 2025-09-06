@@ -19,9 +19,10 @@ interface CheckInFlowProps {
     onPrintRequest: (type: 'boardingPass' | 'baggageTag') => void;
     onNewCheckin: () => void;
     checkedInPassenger: CheckedInPassenger | null;
+    onShowManifest: () => void;
 }
 
-export function CheckInFlow({ onCheckinComplete, onPrintRequest, onNewCheckin, checkedInPassenger }: CheckInFlowProps) {
+export function CheckInFlow({ onCheckinComplete, onPrintRequest, onNewCheckin, checkedInPassenger, onShowManifest }: CheckInFlowProps) {
   const [screen, setScreen] = useState<Screen>('checkinForm');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -107,11 +108,11 @@ export function CheckInFlow({ onCheckinComplete, onPrintRequest, onNewCheckin, c
   const renderScreen = () => {
     switch (screen) {
       case 'checkinForm':
-        return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} />;
+        return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} onShowManifest={onShowManifest} />;
       case 'securityQuestions':
         return <SecurityQuestionsScreen onConfirm={handleSecurityCheckPassed} onBack={() => setScreen('checkinForm')} />;
       case 'flightDetails':
-        if (!currentPassenger) return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} />;
+        if (!currentPassenger) return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} onShowManifest={onShowManifest} />;
         return (
           <FlightDetailsScreen 
             passenger={currentPassenger}
@@ -124,7 +125,7 @@ export function CheckInFlow({ onCheckinComplete, onPrintRequest, onNewCheckin, c
           />
         );
       case 'boardingPass':
-        if (!checkedInPassenger) return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} />;
+        if (!checkedInPassenger) return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} onShowManifest={onShowManifest}/>;
         return (
           <BoardingPassScreen 
             passenger={checkedInPassenger}
@@ -142,7 +143,7 @@ export function CheckInFlow({ onCheckinComplete, onPrintRequest, onNewCheckin, c
             />
          );
       default:
-        return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} />;
+        return <CheckinFormScreen onSearch={handleSearch} isLoading={isLoading} onShowManifest={onShowManifest}/>;
     }
   };
 
