@@ -60,9 +60,9 @@ export function FlightDetailsScreen({
             <h2 className="text-2xl font-bold text-primary">Flight Details & Seat Selection</h2>
             <p className="text-muted-foreground">Verify details, select a seat, and add baggage.</p>
         </div>
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        {/* Left Column: Info */}
-        <div className="lg:col-span-2 space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Left Column: Info & Baggage */}
+        <div className="space-y-6">
           <ScreenWrapper className="w-full max-w-full p-0">
              <Card className="bg-transparent border-0">
               <CardHeader className="p-4"><CardTitle className="text-base">Passenger Information</CardTitle></CardHeader>
@@ -127,9 +127,9 @@ export function FlightDetailsScreen({
           </ScreenWrapper>
         </div>
 
-        {/* Right Column: Actions */}
-        <div className="lg:col-span-3">
-          <ScreenWrapper className="w-full max-w-full">
+        {/* Right Column: Seat Map */}
+        <div className="lg:col-span-1">
+          <ScreenWrapper className="w-full max-w-full h-full">
             <SeatMap selectedSeat={selectedSeat} onSeatSelect={onSeatSelect} assignedSeat={passenger.seat} />
             {!isSeatSelected && (
               <Alert className="mt-4 border-yellow-500/50 bg-yellow-900/30 text-center">
