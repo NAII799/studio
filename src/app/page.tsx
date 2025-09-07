@@ -25,11 +25,17 @@ export default function Home() {
   
   const handlePrintRequest = (type: 'boardingPass' | 'baggageTag') => {
     setPrintView(type);
-    setTimeout(() => {
+  };
+  
+  useEffect(() => {
+    if (printView) {
+      const timer = setTimeout(() => {
         window.print();
         setPrintView(null);
-    }, 100);
-  };
+      }, 100); 
+      return () => clearTimeout(timer);
+    }
+  }, [printView]);
 
   const handleNewCheckin = () => {
     setPassenger(null);
@@ -41,7 +47,7 @@ export default function Home() {
 
   return (
     <>
-      <div className={showPrintable ? 'no-print' : ''}>
+      {!showPrintable && (
         <div className="flex flex-col min-h-screen bg-background">
           <AirportHeader />
           <main className="flex-1 grid grid-cols-1 xl:grid-cols-[1fr_auto_1fr] items-start justify-center p-4 md:p-10 gap-10 overflow-hidden">
@@ -64,7 +70,7 @@ export default function Home() {
           </main>
           <AirportFooter />
         </div>
-      </div>
+      )}
 
 
       <Sheet open={isManifestOpen} onOpenChange={setIsManifestOpen}>
