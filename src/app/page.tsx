@@ -25,8 +25,13 @@ export default function Home() {
   const handlePrintRequest = (type: 'boardingPass' | 'baggageTag') => {
     const printClass = type === 'boardingPass' ? 'printing-boarding-pass' : 'printing-baggage-tag';
     document.body.classList.add(printClass);
-    window.print();
-    document.body.classList.remove(printClass);
+    
+    // This timeout gives the browser, especially on mobile, enough time 
+    // to render the page with the new class before the print dialog opens.
+    setTimeout(() => {
+        window.print();
+        document.body.classList.remove(printClass);
+    }, 100);
   };
   
   const handleNewCheckin = () => {
