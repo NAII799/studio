@@ -25,14 +25,17 @@ export default function AdminPage() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <AirportHeader />
-      <main className="flex-1 flex flex-col items-center justify-center p-4 md:p-10 gap-10">
-        <div className="w-full max-w-6xl h-full">
-            <CounterStatusBoard isInteractive={true} />
+      <main className="flex-1 p-4 md:p-10">
+        <div className="mx-auto max-w-7xl h-full flex flex-col gap-10">
+            <div className="flex-grow">
+              <CounterStatusBoard isInteractive={true} />
+            </div>
+            <div className="text-center">
+              <Button onClick={() => router.push('/')} variant="outline">Back to Check-in</Button>
+            </div>
         </div>
-        <Button onClick={() => router.push('/')} variant="outline">Back to Check-in</Button>
       </main>
       <AirportFooter />
     </div>
   );
 }
-
