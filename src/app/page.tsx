@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -25,21 +24,25 @@ export default function Home() {
   
   const handlePrintRequest = (type: 'boardingPass' | 'baggageTag') => {
     setPrintView(type);
-    setTimeout(() => window.print(), 100); 
   };
-
+  
   const handlePrintComplete = () => {
     setPrintView(null);
-  }
+  };
 
   useEffect(() => {
     if (printView) {
-      window.onafterprint = () => {
-        handlePrintComplete();
+      const printAndCleanup = () => {
+        window.print();
+        // We use a timeout to allow the print dialog to open before resetting the view.
+        // This is more reliable across browsers than onafterprint.
+        setTimeout(() => {
+          handlePrintComplete();
+        }, 100);
       };
-      return () => {
-        window.onafterprint = null;
-      };
+      // A small delay to ensure the component has re-rendered with the correct view.
+      const timer = setTimeout(printAndCleanup, 100);
+      return () => clearTimeout(timer);
     }
   }, [printView]);
 
@@ -54,18 +57,17 @@ export default function Home() {
   const showMainUI = !showPrintable;
 
   return (
-    <>
+    <div className="mx-auto max-w-screen-2xl">
       {showMainUI && (
         <div className="flex flex-col min-h-screen bg-background">
           <AirportHeader />
           <main className="flex-1 p-4 md:p-10">
-            <div className="mx-auto max-w-[100rem]">
-              <div className="grid grid-cols-1 xl:grid-cols-3 items-stretch justify-center gap-10">
-                <div className="flex-shrink-0 flex flex-col h-full w-full mx-auto xl:mx-0">
-                  <FlightInfoBoard />
-                </div>
-                <div className="flex-1 flex items-start justify-center">
-                  <CheckInFlow 
+            <div className="grid grid-cols-1 xl:grid-cols-[1fr,auto,1fr] items-stretch justify-center gap-10">
+              <div className="flex-shrink-0 flex flex-col h-full w-full mx-auto xl:mx-0 max-w-lg justify-self-end">
+                <FlightInfoBoard />
+              </div>
+              <div className="flex-1 flex items-start justify-center max-w-3xl">
+                <CheckInFlow 
                     onCheckinComplete={handleCheckinComplete}
                     onPrintRequest={handlePrintRequest}
                     onNewCheckin={handleNewCheckin}
@@ -73,10 +75,9 @@ export default function Home() {
                     onShowManifest={() => setIsManifestOpen(true)}
                     onSearchStart={() => setIsCountersVisible(false)}
                   />
-                </div>
-                <div className="flex-shrink-0 flex flex-col h-full w-full mx-auto xl:mx-0">
+              </div>
+              <div className="flex-shrink-0 flex flex-col h-full w-full mx-auto xl:mx-0 max-w-lg justify-self-start">
                   {isCountersVisible && <CounterStatusBoard isInteractive={false} />}
-                </div>
               </div>
             </div>
           </main>
@@ -96,6 +97,6 @@ export default function Home() {
             {printView === 'baggageTag' && <BaggageTagPrint passenger={passenger} />}
         </div>
       )}
-    </>
+    </div>
   );
 }
