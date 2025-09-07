@@ -15,7 +15,6 @@ import { CounterStatusBoard } from "@/components/counter-status-board";
 
 export default function Home() {
   const [passenger, setPassenger] = useState<CheckedInPassenger | null>(null);
-  const [printView, setPrintView] = useState<'boardingPass' | 'baggageTag' | null>(null);
   const [isManifestOpen, setIsManifestOpen] = useState(false);
   const [isCountersVisible, setIsCountersVisible] = useState(true);
 
@@ -24,16 +23,14 @@ export default function Home() {
   };
   
   const handlePrintRequest = (type: 'boardingPass' | 'baggageTag') => {
-    setPrintView(type);
-    setTimeout(() => {
-      window.print();
-      setPrintView(null);
-    }, 100); 
+    const printClass = type === 'boardingPass' ? 'printing-boarding-pass' : 'printing-baggage-tag';
+    document.body.classList.add(printClass);
+    window.print();
+    document.body.classList.remove(printClass);
   };
   
   const handleNewCheckin = () => {
     setPassenger(null);
-    setPrintView(null);
     setIsCountersVisible(true);
   };
 
@@ -72,9 +69,17 @@ export default function Home() {
         </Sheet>
       </div>
 
-      <div className="printable-area hidden">
-          {passenger && printView === 'boardingPass' && <BoardingPassPrint passenger={passenger} />}
-          {passenger && printView === 'baggageTag' && <BaggageTagPrint passenger={passenger} />}
+      <div className="print-area">
+        {passenger && (
+          <>
+            <div className="printable-boarding-pass">
+              <BoardingPassPrint passenger={passenger} />
+            </div>
+            <div className="printable-baggage-tag">
+              <BaggageTagPrint passenger={passenger} />
+            </div>
+          </>
+        )}
       </div>
     </>
   );
