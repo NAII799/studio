@@ -27,17 +27,12 @@ export default function Home() {
     setPrintView(type);
   };
 
-  const handlePrintComplete = () => {
-    setPrintView(null);
-  }
-  
   useEffect(() => {
     if (printView) {
       const timer = setTimeout(() => {
         window.print();
-        // After printing (or closing the print dialog), we just want to hide the print view,
-        // not start a whole new check-in.
-        handlePrintComplete();
+        // After printing, start a new check-in session.
+        handleNewCheckin(); 
       }, 100); 
       return () => clearTimeout(timer);
     }
@@ -53,31 +48,28 @@ export default function Home() {
 
   return (
     <>
-      {!showPrintable && (
-        <div className="flex flex-col min-h-screen bg-background">
-          <AirportHeader />
-          <main className="flex-1 grid grid-cols-1 xl:grid-cols-[1fr_auto_1fr] items-start justify-center p-4 md:p-10 gap-10 overflow-hidden">
-            <div className="flex-shrink-0 flex flex-col h-full overflow-hidden w-full max-w-md mx-auto xl:mx-0">
-              <FlightInfoBoard />
-            </div>
-            <div className="flex-1 flex items-start justify-center">
-               <CheckInFlow 
-                onCheckinComplete={handleCheckinComplete}
-                onPrintRequest={handlePrintRequest}
-                onNewCheckin={handleNewCheckin}
-                checkedInPassenger={passenger}
-                onShowManifest={() => setIsManifestOpen(true)}
-                onSearchStart={() => setIsCountersVisible(false)}
-              />
-            </div>
-             <div className="flex-shrink-0 flex flex-col h-full overflow-auto w-full max-w-3xl mx-auto xl:mx-0">
-              {isCountersVisible && <CounterStatusBoard isInteractive={false} />}
-            </div>
-          </main>
-          <AirportFooter />
-        </div>
-      )}
-
+      <div className="flex flex-col min-h-screen bg-background no-print">
+        <AirportHeader />
+        <main className="flex-1 grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-start justify-center p-4 md:p-10 gap-10 overflow-hidden">
+          <div className="flex-shrink-0 flex flex-col h-full overflow-hidden w-full max-w-md mx-auto xl:mx-0">
+            <FlightInfoBoard />
+          </div>
+          <div className="flex-1 flex items-start justify-center">
+             <CheckInFlow 
+              onCheckinComplete={handleCheckinComplete}
+              onPrintRequest={handlePrintRequest}
+              onNewCheckin={handleNewCheckin}
+              checkedInPassenger={passenger}
+              onShowManifest={() => setIsManifestOpen(true)}
+              onSearchStart={() => setIsCountersVisible(false)}
+            />
+          </div>
+           <div className="flex-shrink-0 flex flex-col h-full overflow-auto w-full max-w-3xl mx-auto xl:mx-0">
+            {isCountersVisible && <CounterStatusBoard isInteractive={false} />}
+          </div>
+        </main>
+        <AirportFooter />
+      </div>
 
       <Sheet open={isManifestOpen} onOpenChange={setIsManifestOpen}>
         <SheetContent className="w-full sm:max-w-2xl p-0">
