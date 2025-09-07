@@ -26,12 +26,18 @@ export default function Home() {
   const handlePrintRequest = (type: 'boardingPass' | 'baggageTag') => {
     setPrintView(type);
   };
+
+  const handlePrintComplete = () => {
+    setPrintView(null);
+  }
   
   useEffect(() => {
     if (printView) {
       const timer = setTimeout(() => {
         window.print();
-        setPrintView(null);
+        // After printing (or closing the print dialog), we just want to hide the print view,
+        // not start a whole new check-in.
+        handlePrintComplete();
       }, 100); 
       return () => clearTimeout(timer);
     }
