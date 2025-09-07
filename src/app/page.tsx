@@ -5,8 +5,6 @@ import { useState, useEffect } from "react";
 import { AirportHeader } from "@/components/airport-header";
 import { AirportFooter } from "@/components/airport-footer";
 import { CheckInFlow } from "@/components/check-in-flow";
-import { BoardingPassPrint } from "@/components/boarding-pass-print";
-import { BaggageTagPrint } from "@/components/baggage-tag-print";
 import type { CheckedInPassenger } from "@/lib/types";
 import { FlightInfoBoard } from "@/components/flight-info-board";
 import { PassengerManifest } from "@/components/passenger-manifest";
@@ -23,15 +21,19 @@ export default function Home() {
   };
   
   const handlePrintRequest = (type: 'boardingPass' | 'baggageTag') => {
-    const printClass = type === 'boardingPass' ? 'printing-boarding-pass' : 'printing-baggage-tag';
-    document.body.classList.add(printClass);
-    
-    // This timeout gives the browser, especially on mobile, enough time 
-    // to render the page with the new class before the print dialog opens.
-    setTimeout(() => {
-        window.print();
-        document.body.classList.remove(printClass);
-    }, 100);
+      if (!passenger) return;
+      const passengerData = encodeURIComponent(JSON.stringify(passenger));
+      const url = `/print?type=${type}&passenger=${passengerData}`;
+      
+      // Open a new window. Most browsers will focus it automatically.
+      const printWindow = window.open(url, '_blank', 'width=800,height=600');
+
+      // For extra safety, you can try to focus it, though it might be blocked by popup blockers.
+      if (printWindow) {
+        printWindow.focus();
+      } else {
+        alert('Please allow pop-ups for this site to print.');
+      }
   };
   
   const handleNewCheckin = () => {
@@ -40,52 +42,35 @@ export default function Home() {
   };
 
   return (
-    <>
-      <div>
-        <div className="flex flex-col min-h-screen bg-background">
-          <AirportHeader />
-          <main className="flex-1 p-4 md:p-10">
-            <div className="grid grid-cols-1 xl:grid-cols-[1fr,auto,1fr] items-stretch justify-center gap-10">
-              <div className="flex-shrink-0 flex flex-col h-full w-full mx-auto xl:mx-0 max-w-lg justify-self-end">
-                <FlightInfoBoard />
-              </div>
-              <div className="flex-1 flex items-start justify-center max-w-3xl">
-                <CheckInFlow 
-                    onCheckinComplete={handleCheckinComplete}
-                    onPrintRequest={handlePrintRequest}
-                    onNewCheckin={handleNewCheckin}
-                    checkedInPassenger={passenger}
-                    onShowManifest={() => setIsManifestOpen(true)}
-                    onSearchStart={() => setIsCountersVisible(false)}
-                  />
-              </div>
-              <div className="flex-shrink-0 flex flex-col h-full w-full mx-auto xl:mx-0 max-w-lg justify-self-start">
-                  {isCountersVisible && <CounterStatusBoard isInteractive={false} />}
-              </div>
-            </div>
-          </main>
-          <AirportFooter />
+    <div className="flex flex-col min-h-screen bg-background">
+      <AirportHeader />
+      <main className="flex-1 w-full p-4 md:p-10">
+        <div className="grid grid-cols-1 xl:grid-cols-[1fr,auto,1fr] items-stretch justify-center gap-10">
+          <div className="flex-shrink-0 flex flex-col h-full w-full mx-auto xl:mx-0 max-w-lg justify-self-end">
+            <FlightInfoBoard />
+          </div>
+          <div className="flex-1 flex items-start justify-center max-w-3xl">
+            <CheckInFlow 
+                onCheckinComplete={handleCheckinComplete}
+                onPrintRequest={handlePrintRequest}
+                onNewCheckin={handleNewCheckin}
+                checkedInPassenger={passenger}
+                onShowManifest={() => setIsManifestOpen(true)}
+                onSearchStart={() => setIsCountersVisible(false)}
+              />
+          </div>
+          <div className="flex-shrink-0 flex flex-col h-full w-full mx-auto xl:mx-0 max-w-lg justify-self-start">
+              {isCountersVisible && <CounterStatusBoard isInteractive={false} />}
+          </div>
         </div>
+      </main>
+      <AirportFooter />
 
-        <Sheet open={isManifestOpen} onOpenChange={setIsManifestOpen}>
-          <SheetContent className="w-full sm:max-w-2xl p-0">
-            <PassengerManifest />
-          </SheetContent>
-        </Sheet>
-      </div>
-
-      <div className="print-area">
-        {passenger && (
-          <>
-            <div className="printable-boarding-pass">
-              <BoardingPassPrint passenger={passenger} />
-            </div>
-            <div className="printable-baggage-tag">
-              <BaggageTagPrint passenger={passenger} />
-            </div>
-          </>
-        )}
-      </div>
-    </>
+      <Sheet open={isManifestOpen} onOpenChange={setIsManifestOpen}>
+        <SheetContent className="w-full sm:max-w-2xl p-0">
+          <PassengerManifest />
+        </SheetContent>
+      </Sheet>
+    </div>
   );
 }
