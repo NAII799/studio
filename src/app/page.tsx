@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -24,41 +25,21 @@ export default function Home() {
   
   const handlePrintRequest = (type: 'boardingPass' | 'baggageTag') => {
     setPrintView(type);
+    setTimeout(() => {
+      window.print();
+      setPrintView(null);
+    }, 100); 
   };
   
-  const handlePrintComplete = () => {
-    setPrintView(null);
-  };
-
-  useEffect(() => {
-    if (printView) {
-      const printAndCleanup = () => {
-        window.print();
-        // We use a timeout to allow the print dialog to open before resetting the view.
-        // This is more reliable across browsers than onafterprint.
-        setTimeout(() => {
-          handlePrintComplete();
-        }, 100);
-      };
-      // A small delay to ensure the component has re-rendered with the correct view.
-      const timer = setTimeout(printAndCleanup, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [printView]);
-
-
   const handleNewCheckin = () => {
     setPassenger(null);
     setPrintView(null);
     setIsCountersVisible(true);
   };
 
-  const showPrintable = printView && passenger;
-  const showMainUI = !showPrintable;
-
   return (
-    <div className="mx-auto max-w-screen-2xl">
-      {showMainUI && (
+    <>
+      <div className="mx-auto max-w-screen-2xl">
         <div className="flex flex-col min-h-screen bg-background">
           <AirportHeader />
           <main className="flex-1 p-4 md:p-10">
@@ -83,20 +64,18 @@ export default function Home() {
           </main>
           <AirportFooter />
         </div>
-      )}
 
-      <Sheet open={isManifestOpen} onOpenChange={setIsManifestOpen}>
-        <SheetContent className="w-full sm:max-w-2xl p-0">
-          <PassengerManifest />
-        </SheetContent>
-      </Sheet>
+        <Sheet open={isManifestOpen} onOpenChange={setIsManifestOpen}>
+          <SheetContent className="w-full sm:max-w-2xl p-0">
+            <PassengerManifest />
+          </SheetContent>
+        </Sheet>
+      </div>
 
-      {showPrintable && (
-        <div className="printable-area">
-            {printView === 'boardingPass' && <BoardingPassPrint passenger={passenger} />}
-            {printView === 'baggageTag' && <BaggageTagPrint passenger={passenger} />}
-        </div>
-      )}
-    </div>
+      <div className="printable-area hidden">
+          {passenger && printView === 'boardingPass' && <BoardingPassPrint passenger={passenger} />}
+          {passenger && printView === 'baggageTag' && <BaggageTagPrint passenger={passenger} />}
+      </div>
+    </>
   );
 }
