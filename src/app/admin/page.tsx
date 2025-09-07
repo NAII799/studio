@@ -26,7 +26,7 @@ export default function AdminPage() {
     <div className="flex flex-col min-h-screen bg-background">
       <AirportHeader />
       <main className="flex-1 p-4 md:p-10">
-        <div className="mx-auto max-w-7xl h-full flex flex-col gap-10">
+        <div className="mx-auto h-full flex flex-col gap-10">
             <div className="flex-grow">
               <CounterStatusBoard isInteractive={true} />
             </div>

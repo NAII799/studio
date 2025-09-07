@@ -36,7 +36,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="mx-auto max-w-screen-2xl">
+      <div>
         <div className="flex flex-col min-h-screen bg-background">
           <AirportHeader />
           <main className="flex-1 p-4 md:p-10">
