@@ -50,7 +50,7 @@ export default function Home() {
     <>
       <div className="flex flex-col min-h-screen bg-background no-print">
         <AirportHeader />
-        <main className="flex-1 grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-start justify-center p-4 md:p-10 gap-10 overflow-hidden">
+        <main className="flex-1 grid grid-cols-1 xl:grid-cols-[auto_1fr_auto] items-start justify-center p-4 md:p-10 gap-10 overflow-hidden">
           <div className="flex-shrink-0 flex flex-col h-full overflow-hidden w-full max-w-md mx-auto xl:mx-0">
             <FlightInfoBoard />
           </div>
