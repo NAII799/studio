@@ -27,12 +27,15 @@ export default function Home() {
     setPrintView(type);
   };
 
+  const handlePrintComplete = () => {
+    setPrintView(null);
+  }
+
   useEffect(() => {
     if (printView) {
       const timer = setTimeout(() => {
         window.print();
-        // After printing, start a new check-in session.
-        handleNewCheckin(); 
+        handlePrintComplete();
       }, 100); 
       return () => clearTimeout(timer);
     }
