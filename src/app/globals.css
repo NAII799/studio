@@ -90,19 +90,10 @@
 }
 
 @media print {
-  body.print-styles > * {
-    display: none;
-  }
-
-  body.print-styles .printable-area {
-    display: block !important;
-  }
-  
   .no-print {
     display: none !important;
   }
-
   .printable-area {
-    display: none;
+    display: block !important;
   }
 }

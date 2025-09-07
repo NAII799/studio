@@ -19,15 +19,6 @@ export default function Home() {
   const [isManifestOpen, setIsManifestOpen] = useState(false);
   const [isCountersVisible, setIsCountersVisible] = useState(true);
 
-  useEffect(() => {
-    if (printView) {
-      document.body.classList.add('print-styles');
-    } else {
-      document.body.classList.remove('print-styles');
-    }
-  }, [printView]);
-
-
   const handleCheckinComplete = (p: CheckedInPassenger) => {
     setPassenger(p);
   };
@@ -50,28 +41,31 @@ export default function Home() {
 
   return (
     <>
-      <div className={`flex flex-col min-h-screen bg-background ${showPrintable ? 'no-print' : ''}`}>
-        <AirportHeader />
-        <main className="flex-1 grid grid-cols-1 xl:grid-cols-[auto_1fr_auto] items-start justify-center p-4 md:p-10 gap-10 overflow-hidden">
-          <div className="xl:col-span-1 flex-shrink-0 flex flex-col h-full overflow-hidden w-full max-w-md">
-            <FlightInfoBoard />
-          </div>
-          <div className="xl:col-span-1 flex-1 flex items-start justify-center">
-             <CheckInFlow 
-              onCheckinComplete={handleCheckinComplete}
-              onPrintRequest={handlePrintRequest}
-              onNewCheckin={handleNewCheckin}
-              checkedInPassenger={passenger}
-              onShowManifest={() => setIsManifestOpen(true)}
-              onSearchStart={() => setIsCountersVisible(false)}
-            />
-          </div>
-           <div className="xl:col-span-1 flex-shrink-0 flex flex-col h-full overflow-auto w-full max-w-3xl">
-            {isCountersVisible && <CounterStatusBoard isInteractive={false} />}
-          </div>
-        </main>
-        <AirportFooter />
+      <div className={showPrintable ? 'no-print' : ''}>
+        <div className="flex flex-col min-h-screen bg-background">
+          <AirportHeader />
+          <main className="flex-1 grid grid-cols-1 xl:grid-cols-[1fr_auto_1fr] items-start justify-center p-4 md:p-10 gap-10 overflow-hidden">
+            <div className="flex-shrink-0 flex flex-col h-full overflow-hidden w-full max-w-md mx-auto xl:mx-0">
+              <FlightInfoBoard />
+            </div>
+            <div className="flex-1 flex items-start justify-center">
+               <CheckInFlow 
+                onCheckinComplete={handleCheckinComplete}
+                onPrintRequest={handlePrintRequest}
+                onNewCheckin={handleNewCheckin}
+                checkedInPassenger={passenger}
+                onShowManifest={() => setIsManifestOpen(true)}
+                onSearchStart={() => setIsCountersVisible(false)}
+              />
+            </div>
+             <div className="flex-shrink-0 flex flex-col h-full overflow-auto w-full max-w-3xl mx-auto xl:mx-0">
+              {isCountersVisible && <CounterStatusBoard isInteractive={false} />}
+            </div>
+          </main>
+          <AirportFooter />
+        </div>
       </div>
+
 
       <Sheet open={isManifestOpen} onOpenChange={setIsManifestOpen}>
         <SheetContent className="w-full sm:max-w-2xl p-0">
