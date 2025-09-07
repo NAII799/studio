@@ -60,8 +60,8 @@ export default function Home() {
           <AirportHeader />
           <main className="flex-1 p-4 md:p-10">
             <div className="mx-auto max-w-[100rem]">
-              <div className="grid grid-cols-1 xl:grid-cols-[auto_1fr_auto] items-stretch justify-center gap-10">
-                <div className="flex-shrink-0 flex flex-col h-full w-full max-w-md mx-auto xl:mx-0">
+              <div className="grid grid-cols-1 xl:grid-cols-3 items-stretch justify-center gap-10">
+                <div className="flex-shrink-0 flex flex-col h-full w-full mx-auto xl:mx-0">
                   <FlightInfoBoard />
                 </div>
                 <div className="flex-1 flex items-start justify-center">
@@ -74,7 +74,7 @@ export default function Home() {
                     onSearchStart={() => setIsCountersVisible(false)}
                   />
                 </div>
-                <div className="flex-shrink-0 flex flex-col h-full w-full max-w-3xl mx-auto xl:mx-0">
+                <div className="flex-shrink-0 flex flex-col h-full w-full mx-auto xl:mx-0">
                   {isCountersVisible && <CounterStatusBoard isInteractive={false} />}
                 </div>
               </div>
