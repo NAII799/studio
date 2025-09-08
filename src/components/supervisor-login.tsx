@@ -39,7 +39,8 @@ export function SupervisorLogin({ onLoginSuccess }: SupervisorLoginProps) {
     // Simulate API call
     await new Promise(res => setTimeout(res, 500));
 
-    if (values.username.toUpperCase() === 'NAIF' && values.password === '1212') {
+    const username = values.username.toUpperCase();
+    if ((username === 'NAIF' || username === 'ADMIN') && values.password === '1212') {
       toast({
         title: "Login Successful",
         description: "Welcome, Supervisor.",
